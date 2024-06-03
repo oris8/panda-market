@@ -2,12 +2,7 @@
 
 import BestPost from "@/components/boards/BestPost";
 import useDeviceSize from "@/hooks/useDeviceSize";
-
-const BEST_POST_LIMIT: { [key in DeviceSizes]: number } = {
-  small: 1,
-  medium: 2,
-  large: 3,
-};
+import { BEST_POST_LIMIT } from "@/constants/pageLimit";
 
 interface BestPostListProps {
   className?: string;

@@ -2,22 +2,19 @@ import BaseDropdown from "./BaseDropdown";
 import useDeviceSize from "@/hooks/useDeviceSize";
 import SortIcon from "/public/images/ic_sort.svg";
 import ArrowDownIcon from "/public/images/ic_arrow-down.svg";
-
-const SortOptions = {
-  recent: "최신순",
-  like: "좋아요순",
-};
+import { SORT_OPTIONS, SortOptionsKeys } from "@/types/SortOptions";
 
 interface SortDropdownProps {
   className?: string;
-  order: keyof typeof SortOptions;
-  onClick: (selectedOrder: keyof typeof SortOptions) => void;
+  order: SortOptionsKeys;
+  onClick: (selectedOrder: SortOptionsKeys) => void;
 }
 
 const SortDropdown = ({ className, order, onClick }: SortDropdownProps) => {
   const deviceSize = useDeviceSize();
+  const sortOptionsKeys = Object.keys(SORT_OPTIONS) as SortOptionsKeys[];
 
-  const handleOptionClick = (selectedOrder: keyof typeof SortOptions) => {
+  const handleOptionClick = (selectedOrder: SortOptionsKeys) => {
     onClick(selectedOrder);
   };
 
@@ -29,19 +26,19 @@ const SortDropdown = ({ className, order, onClick }: SortDropdownProps) => {
           <SortIcon />
         ) : (
           <div className="flexcenter w-96">
-            <p>{SortOptions[order]}</p>
+            <p>{SORT_OPTIONS[order]}</p>
             <ArrowDownIcon />
           </div>
         )
       }
     >
-      {Object.keys(SortOptions).map((option) => (
+      {sortOptionsKeys.map((option) => (
         <button
           key={option}
-          onClick={() => handleOptionClick(option as keyof typeof SortOptions)}
+          onClick={() => handleOptionClick(option)}
           className="flex w-128 justify-center border-b border-gray-200 p-8 text-base font-normal first:rounded-t-12 last:rounded-b-12 last:border-0"
         >
-          {SortOptions[option as keyof typeof SortOptions]}
+          {SORT_OPTIONS[option]}
         </button>
       ))}
     </BaseDropdown>

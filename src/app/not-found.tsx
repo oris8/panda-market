@@ -4,10 +4,12 @@ const shadowStyle =
 export default function NotFoundPage() {
   return (
     <div className="relative mx-auto mt-80 h-[calc(100vh-230px)] max-w-[1280px]">
-      <div className="text-32 absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transform text-center font-bold tracking-widest">
-        <div className="text-100 leading-102 relative mb-24 whitespace-nowrap">
-          <div className={shadowStyle}></div>4
-          <div className="mx-14 inline-block animate-emojiFloating">🐼</div>4
+      <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transform text-center text-32 font-bold tracking-widest">
+        <div className="leading-102 relative mb-24 whitespace-nowrap text-100">
+          <div className={shadowStyle}></div>
+          <span>4</span>
+          <span className="mx-14 inline-block animate-emojiFloating">🐼</span>
+          <span>4</span>
         </div>
         NotFoundPage
       </div>

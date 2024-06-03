@@ -7,13 +7,14 @@ import SortDropdown from "@/components/SortDropdown";
 import NormalPost from "@/components/boards/NormalPost";
 import Pagination from "@/components/Pagination";
 import usePagination from "@/hooks/usePagination";
+import { SortOptionsKeys } from "@/types/SortOptions";
+import { POST_LIMIT } from "@/constants/pageLimit";
 
 interface NormalPostListProps {
   className?: string;
   data: Post[];
   keyword: string;
 }
-const LIMIT = 3;
 
 const NormalPostList = ({
   className = "",
@@ -22,7 +23,7 @@ const NormalPostList = ({
 }: NormalPostListProps) => {
   const router = useRouter();
   const params = new URLSearchParams(document.location.search);
-  const order = (params.get("orderBy") as SortOptions) || "recent";
+  const order = (params.get("orderBy") as SortOptionsKeys) || "recent";
   const {
     currentPage,
     totalPages,
@@ -30,13 +31,13 @@ const NormalPostList = ({
     goToNextPage,
     goToPage,
     paginatedList,
-  } = usePagination<Post>(data, LIMIT);
+  } = usePagination<Post>(data, POST_LIMIT);
 
   const handleSearch = (query: string) => {
     router.replace(`/boards?keyword=${query}`);
   };
 
-  const handleOrder = (order: SortOptions) => {
+  const handleOrder = (order: SortOptionsKeys) => {
     router.replace(`/boards?order=${order}`);
   };
 
