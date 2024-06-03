@@ -20,7 +20,7 @@ const FavoriteButton = ({
 }: FavoriteButtonProps) => {
   const pathname = usePathname();
 
-  const { handleFavoriteClick, isLiked, likeCount } = useFavoriteButton(
+  const { toggleFavoriteButton, isLiked, likeCount } = useFavoriteButton(
     pathname,
     isFavorite,
     favoriteCount,
@@ -28,7 +28,7 @@ const FavoriteButton = ({
 
   const handleClick = () => {
     if (id) {
-      handleFavoriteClick(id);
+      toggleFavoriteButton(id);
     }
   };
 

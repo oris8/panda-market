@@ -13,7 +13,7 @@ const useFavoriteButton = (
   const { isLiked, likeCount } = values;
   const { axiosFetcher } = useDataFetch();
 
-  const handleFavoriteClick = async (id: number) => {
+  const toggleFavoriteButton = async (id: number) => {
     //TODO user 여부 판단 후 click handler 진행
     // if (!user) return;
     return;
@@ -45,7 +45,7 @@ const useFavoriteButton = (
     }
   };
 
-  return { handleFavoriteClick, isLiked, likeCount };
+  return { toggleFavoriteButton, isLiked, likeCount };
 };
 
 export default useFavoriteButton;
