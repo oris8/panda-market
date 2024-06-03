@@ -1,5 +1,5 @@
 import Image from "next/image";
-import CardFavorites from "@/components/CardFavorite";
+import FavoriteButton from "@/components//FavoriteButton";
 
 interface PostInfoProps {
   showProfile?: boolean;
@@ -40,9 +40,8 @@ const PostInfo = ({
         </div>
       )}
       {likeCount !== undefined && (
-        <CardFavorites
+        <FavoriteButton
           className="postInfoFavorites text-14 font-normal text-cool-gray-500"
-          isFavorite={false}
           favoriteCount={likeCount}
         />
       )}
