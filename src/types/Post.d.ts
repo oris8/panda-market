@@ -6,6 +6,7 @@ interface PostWriter {
 interface Post {
   updatedAt: Date;
   createdAt: Date;
+  isLiked?: boolean;
   likeCount: number;
   writer: PostWriter;
   image: string;

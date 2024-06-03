@@ -1,1 +1,0 @@
-type SortOptions = "recent" | "like";
