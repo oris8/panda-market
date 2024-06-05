@@ -13,7 +13,7 @@ const NormalPost = ({ className = "", data }: NormalPostProps) => {
 
   return (
     <div className={`mt-24 min-h-136 w-full min-w-343 bg-white ${className}`}>
-      <Link href={`/post/${id}`}>
+      <Link href={`/addboard/${id}`}>
         <PostContent title={title} content={content} image={image} />
       </Link>
       <div className="flex items-center pt-16 [&>.postInfoFavorites]:ml-auto [&>.postInfoWriter]:mr-8">

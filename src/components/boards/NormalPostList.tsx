@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import SearchInput from "@/components/SearchInput";
+import SearchInput from "@/components/Input/SearchInput";
 import SortDropdown from "@/components/SortDropdown";
 import NormalPost from "@/components/boards/NormalPost";
 import Pagination from "@/components/Pagination";
@@ -22,8 +22,6 @@ const NormalPostList = ({
   keyword,
 }: NormalPostListProps) => {
   const router = useRouter();
-  const params = new URLSearchParams(document.location.search);
-  const order = (params.get("orderBy") as SortOptionsKeys) || "recent";
   const {
     currentPage,
     totalPages,
@@ -32,6 +30,14 @@ const NormalPostList = ({
     goToPage,
     paginatedList,
   } = usePagination<Post>(data, POST_LIMIT);
+
+  let params;
+  let order;
+
+  if (typeof document) {
+    params = new URLSearchParams(document.location.search);
+    order = params.get("orderBy") as SortOptionsKeys;
+  }
 
   const handleSearch = (query: string) => {
     router.replace(`/boards?keyword=${query}`);
@@ -49,7 +55,7 @@ const NormalPostList = ({
           defaultValue={keyword ? keyword : ""}
           onKeyDown={handleSearch}
         />
-        <SortDropdown order={order} onClick={handleOrder} />
+        <SortDropdown order={order ? order : "recent"} onClick={handleOrder} />
       </div>
       <div className={`flex h-480 flex-col ${className}`}>
         {data && data.length !== 0 ? (
@@ -73,7 +79,7 @@ const NormalPostList = ({
         )}
       </div>
       <Pagination
-        className="mt-24"
+        className="py-40"
         currentPage={currentPage}
         totalPages={totalPages}
         goToPrevPage={goToPrevPage}

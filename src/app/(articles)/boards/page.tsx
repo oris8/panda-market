@@ -1,7 +1,7 @@
 import BestPostList from "@/components/boards/BestPostList";
 import NormalPostList from "@/components/boards/NormalPostList";
-import BaseButton from "@/components/BaseButton";
-import { axiosInstance } from "@/lib/api/dispatcher";
+import Button from "@/components/Button/Button";
+import sendAxiosRequest from "@/lib/api/sendAxiosRequest";
 import { SortOptionsKeys } from "@/types/SortOptions";
 import { BEST_POST_LIMIT } from "@/constants/pageLimit";
 
@@ -23,10 +23,14 @@ const Boards = async ({ searchParams }: BoardsProps) => {
   const order = searchParams.order || INITIAL_POST_PARAMS.order;
 
   const [articlesRes, bestArticlesRes] = await Promise.all([
-    axiosInstance.get(`/articles?orderBy=${order}&keyword=${keyword}`),
-    axiosInstance.get(
-      `/articles?pageSize=${INITIAL_BEST_POST_PARAMS.pageSize}&orderBy=${INITIAL_BEST_POST_PARAMS.order}`,
-    ),
+    sendAxiosRequest({
+      method: "GET",
+      url: `/articles?orderBy=${order}&keyword=${keyword}`,
+    }),
+    sendAxiosRequest({
+      method: "GET",
+      url: `/articles?pageSize=${INITIAL_BEST_POST_PARAMS.pageSize}&orderBy=${INITIAL_BEST_POST_PARAMS.order}`,
+    }),
   ]);
 
   const articles: Post[] = articlesRes.data.list;
@@ -38,9 +42,9 @@ const Boards = async ({ searchParams }: BoardsProps) => {
       <BestPostList data={bestList} className="mb-40 mt-16" />
       <div className="mb-16 flex items-center justify-between">
         <div className="text-20 font-bold text-cool-gray-800">게시글</div>
-        <BaseButton className="h-42 w-88" as="Link" href="/addpost">
+        <Button.Link className="primary-button h-42 w-88" href="/addboard">
           글쓰기
-        </BaseButton>
+        </Button.Link>
       </div>
       <NormalPostList data={articles} keyword={keyword} />
     </>

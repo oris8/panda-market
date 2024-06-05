@@ -18,7 +18,7 @@ const BestPost = ({ className = "", data }: BestPostProps) => {
     >
       <BestBadge />
       <div className="mt-16">
-        <Link href={`/post/${id}`}>
+        <Link href={`/addboard/${id}`}>
           <PostContent title={title} content={content} image={image} />
         </Link>
       </div>

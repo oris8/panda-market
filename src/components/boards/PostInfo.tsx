@@ -22,7 +22,7 @@ const PostInfo = ({
       {showProfile && writer && (
         <div className="mr-8 h-24 w-24">
           <Image
-            src="/images/img_default-profile.png"
+            src="/images/img_default-profile.svg"
             alt="Writer Image"
             width={24}
             height={24}
