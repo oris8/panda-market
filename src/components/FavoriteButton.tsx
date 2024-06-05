@@ -7,7 +7,7 @@ import HeartActiveIcon from "/public/images/ic_heart-active.svg";
 
 interface FavoriteButtonProps {
   className?: string;
-  id?: number;
+  id?: string;
   isFavorite?: boolean;
   favoriteCount: number;
 }

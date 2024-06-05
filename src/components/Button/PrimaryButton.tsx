@@ -5,15 +5,15 @@ interface PrimaryButtonProps {
   className?: string;
   type?: "submit" | "reset" | "button" | undefined;
   disabled?: boolean;
-  onClick?: () => void;
+  onClick?: React.MouseEventHandler;
 }
 
 function PrimaryButton({ children, className, ...rest }: PrimaryButtonProps) {
-  const primaryStyle =
-    "flexcenter h-48 w-128 rounded-8 border-none bg-blue text-16 font-semibold text-white hover:bg-blue-hover focus:outline-none active:bg-blue-active disabled:cursor-not-allowed disabled:bg-disable ";
+  // const primaryStyle =
+  //   "flexcenter h-48 w-128 rounded-8 border-none bg-blue text-16 font-semibold text-white hover:bg-blue-hover focus:outline-none active:bg-blue-active disabled:cursor-not-allowed disabled:bg-disable ";
 
   return (
-    <BaseButton className={`${primaryStyle} ${className}`} {...rest}>
+    <BaseButton className={`primary-button ${className}`} {...rest}>
       {children}
     </BaseButton>
   );

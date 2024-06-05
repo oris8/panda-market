@@ -39,16 +39,11 @@ const BaseDropdown = ({
       className={`relative focus:outline-none [&_button:hover]:bg-[#00000005] ${className}`}
       ref={dropdownRef}
     >
-      <div
-        className="flexcenter h-42 rounded-12 text-16 border border-gray-200 bg-white px-12"
-        onClick={toggleDropdown}
-      >
+      <div className="" onClick={toggleDropdown}>
         {buttonContent}
       </div>
       {isVisible && (
-        <div className="rounded-12 z-2 absolute right-0 top-full mt-4 border border-gray-200 bg-white">
-          {children}
-        </div>
+        <div className="z-2 absolute right-0 top-full"> {children} </div>
       )}
     </div>
   );

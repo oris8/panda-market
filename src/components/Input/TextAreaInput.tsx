@@ -14,8 +14,8 @@ const TextAreaInput = ({
   return (
     <>
       <textarea
-        className={`${className} h-200 w-full resize-none rounded-12 border-0  bg-cool-gray-100 p-16
-        text-16 [&::placeholder]:text-cool-gray-400 [&:focus]:outline [&:focus]:outline-blue`}
+        className={`w-full resize-none rounded-12 border-0 bg-cool-gray-100 p-16
+        text-16 [&::placeholder]:text-cool-gray-400 [&:focus]:outline [&:focus]:outline-blue ${className} `}
         id={label}
         name={label}
         placeholder={placeholder}

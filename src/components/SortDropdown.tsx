@@ -20,7 +20,7 @@ const SortDropdown = ({ className, order, onClick }: SortDropdownProps) => {
 
   return (
     <BaseDropdown
-      className={className}
+      className={`flexcenter h-42 rounded-12 border border-gray-200 bg-white px-12 text-16 ${className}`}
       buttonContent={
         deviceSize === "small" ? (
           <SortIcon />
@@ -32,15 +32,17 @@ const SortDropdown = ({ className, order, onClick }: SortDropdownProps) => {
         )
       }
     >
-      {sortOptionsKeys.map((option) => (
-        <button
-          key={option}
-          onClick={() => handleOptionClick(option)}
-          className="flex w-128 justify-center border-b border-gray-200 p-8 text-base font-normal first:rounded-t-12 last:rounded-b-12 last:border-0"
-        >
-          {SORT_OPTIONS[option]}
-        </button>
-      ))}
+      <div className="mt-4 rounded-12  border border-gray-200 bg-white">
+        {sortOptionsKeys.map((option) => (
+          <button
+            key={option}
+            onClick={() => handleOptionClick(option)}
+            className="flex w-128 justify-center border-b border-gray-200 p-8 text-base font-normal first:rounded-t-12 last:rounded-b-12 last:border-0"
+          >
+            {SORT_OPTIONS[option]}
+          </button>
+        ))}
+      </div>
     </BaseDropdown>
   );
 };

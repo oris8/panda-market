@@ -3,7 +3,7 @@ interface BaseButtonProps {
   className?: string;
   type?: "submit" | "reset" | "button" | undefined;
   disabled?: boolean;
-  onClick?: () => void;
+  onClick?: React.MouseEventHandler;
 }
 
 function BaseButton({ children, className, type, ...rest }: BaseButtonProps) {
