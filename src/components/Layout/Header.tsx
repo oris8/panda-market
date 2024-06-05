@@ -2,14 +2,12 @@
 import Link from "next/link";
 import Image from "next/image";
 import NavLink from "@/components/NavLink";
-import BaseButton from "@/components/BaseButton";
+import Button from "@/components/Button/Button";
+import { useAuth } from "@/contexts/AuthProvider";
+import BaseDropdown from "../BaseDropdown";
 
 interface GNBNavLinkProps {
   href: string;
-  children: React.ReactNode;
-}
-
-interface GNBButtonProps {
   children: React.ReactNode;
 }
 
@@ -32,13 +30,11 @@ const GNBNavLink = ({ href, children }: GNBNavLinkProps) => {
   );
 };
 
-const GNBButton = ({ children }: GNBButtonProps) => (
-  <BaseButton className="h-42 w-88 ml-auto">{children}</BaseButton>
-);
-
 function Header() {
+  const { user, logout } = useAuth(false);
+
   return (
-    <nav className="h-70 xl:px-200 fixed top-0 z-20 flex w-full items-center gap-8 border-b border-gray-200 bg-white px-16 md:px-24">
+    <nav className="fixed top-0 z-20 flex h-70 w-full items-center gap-8 border-b border-gray-200 bg-white px-16 md:px-24 xl:px-200">
       <Link href="/">
         <div className="hidden md:block lg:mr-20">
           <Image
@@ -61,9 +57,33 @@ function Header() {
       </div>
       <GNBNavLink href="/boards">자유게시판</GNBNavLink>
       <GNBNavLink href="/items">중고마켓</GNBNavLink>
-      <GNBButton>
-        <Link href="/login">로그인</Link>
-      </GNBButton>
+      {user ? (
+        <div className="flexcenter ml-auto gap-16">
+          <BaseDropdown
+            buttonContent={
+              <Image
+                src={user.image || "/images/img_default-profile.svg"}
+                width={40}
+                height={40}
+                alt="profile-image"
+              />
+            }
+          >
+            <div className="w-88 translate-y-12 rounded-8 border-1 bg-white text-center">
+              <Button.Link href="/me" className=" h-40 w-full border-b-1 ">
+                마이페이지
+              </Button.Link>
+              <Button onClick={logout} className="h-40 w-full">
+                로그아웃
+              </Button>
+            </div>
+          </BaseDropdown>
+        </div>
+      ) : (
+        <Button.Link href="/login" className="ml-auto h-42 w-88">
+          로그인
+        </Button.Link>
+      )}
     </nav>
   );
 }

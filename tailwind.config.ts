@@ -57,6 +57,8 @@ const config: Config = {
       colors: {
         white: "#ffffff",
         blue: "#3692ff",
+        "blue-hover": "#1967D6",
+        "blue-active": "#1251AA",
         red: "#f74747",
         "gray-50": "#f7f7f8",
         "gray-100": "#e8ebed",
@@ -73,6 +75,8 @@ const config: Config = {
         "cool-gray-500": "#6b7280",
         "cool-gray-600": "#4b5563",
         "cool-gray-800": "#1f2937",
+        disable: "#9CA3AF",
+        error: "#f74747",
       },
       fontFamily: {
         pretendard: ["Pretendard"],
