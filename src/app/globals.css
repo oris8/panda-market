@@ -142,5 +142,11 @@
       white-space: normal;
       word-break: break-all; /*영어 단어 줄바꿈 처리를 위해*/
     }
+
+    .autoImage {
+      object-fit: contain !important;
+      position: relative !important;
+      height: auto !important;
+    }
   }
 }
