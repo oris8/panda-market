@@ -43,7 +43,7 @@ const BaseDropdown = ({
         {buttonContent}
       </div>
       {isVisible && (
-        <div className="z-2 absolute right-0 top-full"> {children} </div>
+        <div className="absolute right-0 top-full z-20"> {children} </div>
       )}
     </div>
   );

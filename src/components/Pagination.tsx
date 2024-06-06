@@ -5,17 +5,17 @@ interface PaginationProps {
   className?: string;
   currentPage: number;
   totalPages: number;
-  goToPrevPage: () => void;
   goToNextPage: () => void;
-  goToPage: (pageNumber: number) => void;
+  goToPrevPage: () => void;
+  goToPage: (page: number) => void;
 }
 
 const Pagination = ({
-  className = "",
+  className,
   currentPage,
   totalPages,
-  goToPrevPage,
   goToNextPage,
+  goToPrevPage,
   goToPage,
 }: PaginationProps) => {
   const buttonStyle =

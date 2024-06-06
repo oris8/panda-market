@@ -4,8 +4,12 @@ import Button from "@/components/Button/Button";
 import sendAxiosRequest from "@/lib/api/sendAxiosRequest";
 import { SortOptionsKeys } from "@/types/SortOptions";
 import { BEST_POST_LIMIT } from "@/constants/pageLimit";
+import { POST_LIMIT } from "@/constants/pageLimit";
 
-const INITIAL_POST_PARAMS = { order: "recent" as SortOptionsKeys };
+const INITIAL_POST_PARAMS = {
+  pageSize: POST_LIMIT,
+  order: "recent" as SortOptionsKeys,
+};
 const INITIAL_BEST_POST_PARAMS = {
   pageSize: BEST_POST_LIMIT["large"],
   order: "like" as SortOptionsKeys,
@@ -13,19 +17,21 @@ const INITIAL_BEST_POST_PARAMS = {
 
 interface BoardsProps {
   searchParams: {
+    page?: number;
     keyword?: string;
     order?: SortOptionsKeys;
   };
 }
 
 const Boards = async ({ searchParams }: BoardsProps) => {
+  const page = searchParams.page || 1;
   const keyword = searchParams.keyword || "";
   const order = searchParams.order || INITIAL_POST_PARAMS.order;
 
   const [articlesRes, bestArticlesRes] = await Promise.all([
     sendAxiosRequest({
       method: "GET",
-      url: `/articles?orderBy=${order}&keyword=${keyword}`,
+      url: `/articles?page=${page}&pageSize=${INITIAL_POST_PARAMS.pageSize}&orderBy=${order}&keyword=${keyword}`,
     }),
     sendAxiosRequest({
       method: "GET",
@@ -33,7 +39,7 @@ const Boards = async ({ searchParams }: BoardsProps) => {
     }),
   ]);
 
-  const articles: Post[] = articlesRes.data.list;
+  const articles = articlesRes.data;
   const bestList: Post[] = bestArticlesRes.data.list;
 
   return (
