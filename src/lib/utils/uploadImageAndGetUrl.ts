@@ -10,6 +10,7 @@ const uploadImageAndGetUrl = async (image: string) => {
       url: "/images/upload",
       data: form,
     });
+    console.log(response.data.url);
     return response.data.url;
   } catch (error) {
     console.error("Error uploading image:", error);

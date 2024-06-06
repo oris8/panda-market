@@ -60,7 +60,7 @@ const ImageInput = ({
     if (onChange) {
       onChange(image);
     }
-  }, [image, onChange]);
+  }, [image]);
 
   return (
     <div className={`flex min-h-168 min-w-168 gap-8 ${className}`}>
