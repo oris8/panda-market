@@ -1,11 +1,41 @@
 "use client";
 
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import BaseInput from "@/components/Input/BaseInput";
 import DeleteButton from "@/components/DeleteButton";
 import PlusIcon from "/public/images/ic_plus.svg";
-import { useImageInput } from "@/hooks/useImageInput";
+
+export const useSingleImageInput = (initialValue: string = "") => {
+  const [image, setImage] = useState<string>(initialValue);
+  const [previewImage, setPreviewImage] = useState<string>("");
+
+  const handleUploadFile: React.ChangeEventHandler<HTMLInputElement> = (e) => {
+    const file = e.target.files?.[0];
+
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      const fileURL = reader.result as string;
+      setImage(fileURL);
+      setPreviewImage(fileURL);
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const handleDeleteFile = () => {
+    setImage("");
+    setPreviewImage("");
+  };
+
+  return {
+    image,
+    previewImage,
+    handleUploadFile,
+    handleDeleteFile,
+  };
+};
 
 interface ImageInputProps {
   className?: string;
@@ -15,9 +45,7 @@ interface ImageInputProps {
 }
 
 /**
- *
  * @param onChange - setter
- * @returns
  */
 const ImageInput = ({
   className,
@@ -25,15 +53,14 @@ const ImageInput = ({
   placeholder,
   onChange,
 }: ImageInputProps) => {
-  const { images, previewImages, handleUploadFile, handleDeleteFile } =
-    useImageInput();
+  const { image, previewImage, handleUploadFile, handleDeleteFile } =
+    useSingleImageInput();
 
   useEffect(() => {
-    if (onChange && images?.length > 0) {
-      onChange(images[0]);
-      console.log(images, previewImages);
+    if (onChange) {
+      onChange(image);
     }
-  }, [images]);
+  }, [image, onChange]);
 
   return (
     <div className={`flex min-h-168 min-w-168 gap-8 ${className}`}>
@@ -52,11 +79,11 @@ const ImageInput = ({
           className="hidden"
         />
       </label>
-      {previewImages[0] && (
+      {previewImage && (
         <div className="relative h-full min-h-168 w-full min-w-168 rounded-12 xl:h-282 xl:w-282">
-          <Image alt={previewImages[0]} src={previewImages[0]} fill />
+          <Image alt="Preview" src={previewImage} fill />
           <DeleteButton
-            onClick={() => handleDeleteFile(0)}
+            onClick={handleDeleteFile}
             className="absolute right-8 top-8 bg-transparent"
           />
         </div>
