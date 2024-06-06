@@ -41,7 +41,7 @@ const CommentSection = ({ initialData }: any) => {
   return (
     <>
       <CommentInput label="댓글 달기" placeholder="댓글을 입력해주세요" />
-      <div className="mb-160 mt-24 flex flex-col gap-24">
+      <div className="mt-24 flex flex-col gap-24 pb-120 ">
         {list.length > 0 ? (
           <>
             {list.map((comment: Comment) => (

@@ -31,7 +31,7 @@ const GNBNavLink = ({ href, children }: GNBNavLinkProps) => {
 };
 
 function Header() {
-  const { user, logout } = useAuth(false);
+  const { user, logout } = useAuth();
 
   return (
     <nav className="fixed top-0 z-20 flex h-70 w-full items-center gap-8 border-b border-gray-200 bg-white px-16 md:px-24 xl:px-200">

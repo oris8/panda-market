@@ -35,8 +35,12 @@ const LogIn = () => {
     e.preventDefault();
 
     const { email, password } = values;
-    await login({ email, password });
-    router.replace("/");
+    try {
+      await login({ email, password });
+      router.replace("/");
+    } catch (err: any) {
+      alert(err.response.data.message);
+    }
   };
 
   return (

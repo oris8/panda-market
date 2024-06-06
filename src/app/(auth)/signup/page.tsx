@@ -7,6 +7,7 @@ import Image from "next/image";
 import Button from "@/components/Button/Button";
 import FormGroup from "@/components/FormGroup/FormGroup";
 import SocialLogin from "@/components/auth/SocialLogin";
+import Popup from "@/components/Popup";
 import sendAxiosRequest from "@/lib/api/sendAxiosRequest";
 import { useAuth } from "@/contexts/AuthProvider";
 
@@ -25,6 +26,7 @@ const SignUp = () => {
     passwordConfirmation: "",
   });
   const [isValidation, setIsValidation] = useState();
+  const [showPopup, setShowPopup] = useState(false);
   const { user, login } = useAuth(false);
   const router = useRouter();
 
@@ -46,10 +48,15 @@ const SignUp = () => {
       });
       const { email, password } = values;
       await login({ email, password });
-      router.replace("/");
+      setShowPopup(true);
     } catch (err: any) {
       alert(err.response.data.message);
     }
+  };
+
+  const handlePopupClose = () => {
+    setShowPopup(false);
+    router.replace("/");
   };
 
   useEffect(() => {
@@ -84,12 +91,12 @@ const SignUp = () => {
         </FormGroup>
         <FormGroup>
           <FormGroup.InputWrapper>
-            <FormGroup.Label htmlFor="email">이메일</FormGroup.Label>
+            <FormGroup.Label htmlFor="email">닉네임</FormGroup.Label>
             <FormGroup.InputField
               label="nickname"
               type="text"
               placeholder="이메일을 입력해주세요"
-              value={values.email}
+              value={values.nickname}
               onChange={handleChange}
             />
           </FormGroup.InputWrapper>
@@ -107,7 +114,7 @@ const SignUp = () => {
         </FormGroup>
         <FormGroup>
           <FormGroup.InputWrapper>
-            <FormGroup.Label htmlFor="password">비밀번호</FormGroup.Label>
+            <FormGroup.Label htmlFor="password">비밀번호 확인</FormGroup.Label>
             <FormGroup.InputField.Password
               label="passwordConfirmation"
               placeholder="비밀번호를 다시 한 번 입력해주세요"
@@ -133,6 +140,10 @@ const SignUp = () => {
           로그인
         </Link>
       </div>
+
+      <Popup isOpen={showPopup} onClose={handlePopupClose}>
+        가입이 완료되었습니다!
+      </Popup>
     </div>
   );
 };
