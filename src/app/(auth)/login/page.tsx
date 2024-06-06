@@ -79,7 +79,7 @@ const LogIn = () => {
         </FormGroup>
 
         <Button.Primary
-          className="mx-w-400 mt-16 w-full rounded-36 md:max-w-[640px]"
+          className="mx-w-400 primary-button mt-16 h-44  w-full rounded-36 md:max-w-[640px]"
           type="submit"
         >
           로그인

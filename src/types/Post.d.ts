@@ -1,6 +1,6 @@
 interface PostWriter {
   nickname: string;
-  id: string;
+  id: number;
 }
 
 interface Post {
@@ -12,5 +12,5 @@ interface Post {
   image: string;
   content: string;
   title: string;
-  id: string;
+  id: number;
 }
