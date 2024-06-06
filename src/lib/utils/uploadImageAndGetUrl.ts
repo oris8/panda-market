@@ -1,6 +1,6 @@
 import sendAxiosRequest from "@/lib/api/sendAxiosRequest";
 
-export const uploadImageAndGetUrl = async (image: string) => {
+const uploadImageAndGetUrl = async (image: string) => {
   try {
     const form = new FormData();
     form.append("image", image);
@@ -16,3 +16,5 @@ export const uploadImageAndGetUrl = async (image: string) => {
     throw error;
   }
 };
+
+export default uploadImageAndGetUrl;

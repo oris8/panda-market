@@ -3,9 +3,9 @@
 import { useRouter } from "next/navigation";
 import Button from "@/components/Button/Button";
 import FormGroup from "@/components/FormGroup/FormGroup";
-import sendAxiosRequest from "@/lib/api/sendAxiosRequest";
-import { uploadImageAndGetUrl } from "@/lib/utils/uploadImageAndGetUrl";
 import useFormData from "@/hooks/useFormData";
+import sendAxiosRequest from "@/lib/api/sendAxiosRequest";
+import uploadImageAndGetUrl from "@/lib/utils/uploadImageAndGetUrl";
 
 interface PostRequestType {
   title: string;

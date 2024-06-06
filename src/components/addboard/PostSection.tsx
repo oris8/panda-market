@@ -7,7 +7,6 @@ import Button from "@/components/Button/Button";
 import FavoriteButton from "@/components/FavoriteButton";
 import useDataFetch from "@/hooks/useDataFetch";
 import useFavoriteButton from "@/hooks/useFavoriteButton";
-import sendAxiosRequest from "@/lib/api/sendAxiosRequest";
 import formatDate from "@/lib/utils/formatDate";
 import { useAuth } from "@/contexts/AuthProvider";
 
