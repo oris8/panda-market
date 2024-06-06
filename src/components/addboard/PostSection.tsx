@@ -1,18 +1,48 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import Image from "next/image";
-import formatDate from "@/lib/utils/formatDate";
+import Button from "@/components/Button/Button";
 import FavoriteButton from "@/components/FavoriteButton";
-import { useAuth } from "@/contexts/AuthProvider";
 import useDataFetch from "@/hooks/useDataFetch";
+import useFavoriteButton from "@/hooks/useFavoriteButton";
+import sendAxiosRequest from "@/lib/api/sendAxiosRequest";
+import formatDate from "@/lib/utils/formatDate";
+import { useAuth } from "@/contexts/AuthProvider";
 
 const Post = ({ initialData }: { initialData: Post }) => {
-  const { user } = useAuth();
-  const { isLoading, axiosFetcher } = useDataFetch();
   const [data, setData] = useState<Post>(initialData);
+  const [isUserPost, setIsUserPost] = useState(false);
+  const { user } = useAuth();
+  const router = useRouter();
+  const { isLoading, axiosFetcher } = useDataFetch();
 
-  const { title, writer, id, likeCount, content, createdAt, image } = data;
+  const {
+    title,
+    writer,
+    id,
+    likeCount,
+    isLiked = false,
+    content,
+    createdAt,
+    image,
+  } = data;
+
+  const {
+    toggleFavoriteButton,
+    isFavoriteButtonLiked,
+    favoriteButtonLikeCount,
+  } = useFavoriteButton("articles", isLiked, likeCount);
+
+  const deletePost = async () => {
+    const options = {
+      method: "DELETE",
+      url: `/articles/${id}`,
+    };
+    await axiosFetcher(options);
+    router.replace("/board");
+  };
 
   // 로그인 되어있으면 게시글 like 상태를 불러오는 useEffect
   useEffect(() => {
@@ -29,6 +59,22 @@ const Post = ({ initialData }: { initialData: Post }) => {
 
     fetchData();
   }, [user, id]);
+
+  // 본인 게시글인지 판단하는 useEffect
+  useEffect(() => {
+    if (user && data?.writer.id === user.id) {
+      setIsUserPost(true);
+    } else setIsUserPost(false);
+  }, [user, data]);
+
+  // 좋아요 상태가 변경될 때마다 데이터를 업데이트하는 useEffect
+  useEffect(() => {
+    setData((prevData) => ({
+      ...prevData,
+      isLiked: isFavoriteButtonLiked,
+      likeCount: favoriteButtonLikeCount,
+    }));
+  }, [isFavoriteButtonLiked, favoriteButtonLikeCount]);
 
   return (
     <>
@@ -50,9 +96,9 @@ const Post = ({ initialData }: { initialData: Post }) => {
                 {formatDate(createdAt)}
               </span>
               <FavoriteButton
-                id={id}
-                isFavorite={data?.isLiked || false}
-                favoriteCount={likeCount}
+                isLiked={isLiked}
+                likeCount={likeCount}
+                onClick={() => toggleFavoriteButton(id)}
               />
             </div>
           </div>
@@ -68,6 +114,8 @@ const Post = ({ initialData }: { initialData: Post }) => {
               />
             )}
           </div>
+
+          {isUserPost && <Button onClick={deletePost}>삭제</Button>}
         </>
       )}
     </>

@@ -4,7 +4,7 @@ import FavoriteButton from "@/components//FavoriteButton";
 interface PostInfoProps {
   showProfile?: boolean;
   writer?: {
-    id: string;
+    id: number;
     nickname: string;
   };
   likeCount?: number;
@@ -42,7 +42,7 @@ const PostInfo = ({
       {likeCount !== undefined && (
         <FavoriteButton
           className="postInfoFavorites text-14 font-normal text-cool-gray-500"
-          favoriteCount={likeCount}
+          likeCount={likeCount}
         />
       )}
     </>

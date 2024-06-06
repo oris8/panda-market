@@ -1,34 +1,34 @@
 import { useState } from "react";
-import useDataFetch from "@/hooks/useDataFetch";
+import { useAuth } from "@/contexts/AuthProvider";
+import sendAxiosRequest from "@/lib/api/sendAxiosRequest";
 
 const useFavoriteButton = (
   path: string,
-  isFavorite: boolean,
-  favoriteCount: number,
+  isLiked: boolean,
+  likeCount: number,
 ) => {
   const [values, setValues] = useState({
-    isLiked: isFavorite,
-    likeCount: favoriteCount,
+    isFavoriteButtonLiked: isLiked,
+    favoriteButtonLikeCount: likeCount,
   });
-  const { isLiked, likeCount } = values;
-  const { axiosFetcher } = useDataFetch();
+  const { user } = useAuth();
+
+  const { isFavoriteButtonLiked, favoriteButtonLikeCount } = values;
 
   const toggleFavoriteButton = async (id: number) => {
-    //TODO user 여부 판단 후 click handler 진행
-    // if (!user) return;
-    return;
+    if (!user) return alert("로그인 후 이용해주세요");
 
-    if (isLiked) {
+    if (isFavoriteButtonLiked) {
       // 좋아요한 경우 좋아요 삭제
       const options = {
         method: "DELETE",
         url: `/${path}/${id}/like`,
       };
-      await axiosFetcher(options);
+      await sendAxiosRequest(options);
       setValues((prevValues) => ({
         ...prevValues,
-        isLiked: false,
-        likeCount: prevValues.likeCount - 1,
+        isFavoriteButtonLiked: false,
+        favoriteButtonLikeCount: prevValues.favoriteButtonLikeCount - 1,
       }));
     } else {
       // 좋아요 안되어있는 경우 좋아요 추가
@@ -36,16 +36,20 @@ const useFavoriteButton = (
         method: "POST",
         url: `/${path}/${id}/like`,
       };
-      await axiosFetcher(options);
+      await sendAxiosRequest(options);
       setValues((prevValues) => ({
         ...prevValues,
-        isLiked: true,
-        likeCount: prevValues.likeCount + 1,
+        isFavoriteButtonLiked: true,
+        favoriteButtonLikeCount: prevValues.favoriteButtonLikeCount + 1,
       }));
     }
   };
 
-  return { toggleFavoriteButton, isLiked, likeCount };
+  return {
+    toggleFavoriteButton,
+    isFavoriteButtonLiked,
+    favoriteButtonLikeCount,
+  };
 };
 
 export default useFavoriteButton;
