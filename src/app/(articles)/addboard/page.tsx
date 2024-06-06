@@ -6,6 +6,7 @@ import FormGroup from "@/components/FormGroup/FormGroup";
 import useFormData from "@/hooks/useFormData";
 import sendAxiosRequest from "@/lib/api/sendAxiosRequest";
 import uploadImageAndGetUrl from "@/lib/utils/uploadImageAndGetUrl";
+import { useAuth } from "@/contexts/AuthProvider";
 
 interface PostRequestType {
   title: string;
@@ -14,6 +15,7 @@ interface PostRequestType {
 }
 
 const AddBoard = () => {
+  const { user } = useAuth(true);
   const router = useRouter();
   const { formData, handleChange, handleImageChange } =
     useFormData<PostRequestType>();
@@ -46,7 +48,7 @@ const AddBoard = () => {
 
   return (
     <div className="relative mb-100">
-      <h1 className="py-36 text-20 font-bold">상품 등록하기</h1>
+      <h1 className="py-36 text-20 font-bold">게시글 등록하기</h1>
       <form onSubmit={handleSubmit}>
         <FormGroup>
           <FormGroup.Label htmlFor="title" className="font-bold">
