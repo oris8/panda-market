@@ -7,14 +7,17 @@ import useFormData from "@/hooks/useFormData";
 import sendAxiosRequest from "@/lib/api/sendAxiosRequest";
 import uploadImageAndGetUrl from "@/lib/utils/uploadImageAndGetUrl";
 import { useAuth } from "@/contexts/AuthProvider";
+import removeAllWhitespace from "@/lib/utils/removeAllWhitespace";
+import { useEffect, useState } from "react";
 
 interface PostRequestType {
   title: string;
   content: string;
-  image: string;
+  image: File | string;
 }
 
 const AddBoard = () => {
+  const [isValidation, setIsValidation] = useState(false);
   const { user } = useAuth(true);
   const router = useRouter();
   const { formData, handleChange, handleImageChange } =
@@ -23,21 +26,16 @@ const AddBoard = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    let imageUrl = formData.image;
-    if (formData.image) {
-      imageUrl = await uploadImageAndGetUrl(formData.image);
+    if (formData.image && typeof formData.image !== "string") {
+      const imageUrl = await uploadImageAndGetUrl(formData.image);
+      handleImageChange(imageUrl);
     }
-
-    const form = new FormData();
-    form.append("title", formData.title);
-    form.append("content", formData.content);
-    imageUrl && form.append("image", imageUrl);
 
     try {
       const response = await sendAxiosRequest({
         method: "POST",
         url: "/articles",
-        data: form,
+        data: formData,
       });
       const id = response.data.id;
       router.replace(`/addboard/${id}`);
@@ -45,6 +43,21 @@ const AddBoard = () => {
       alert(`Error adding post: ${error}`);
     }
   };
+
+  useEffect(() => {
+    const validateForm = () => {
+      if (
+        removeAllWhitespace(formData.title) &&
+        removeAllWhitespace(formData.content)
+      ) {
+        setIsValidation(true);
+      } else {
+        setIsValidation(false);
+      }
+    };
+
+    validateForm();
+  }, [formData]);
 
   return (
     <div className="relative mb-100">
@@ -84,13 +97,14 @@ const AddBoard = () => {
             label="image"
             placeholder="이미지 등록"
             className="my-16 h-168 w-168 xl:h-282 xl:w-282"
-            onChange={() => handleImageChange}
+            onChange={handleImageChange}
           />
         </FormGroup>
 
         <Button.Primary
           className="absolute right-0 top-0 my-36 h-42 w-74"
           type="submit"
+          disabled={!isValidation}
         >
           등록
         </Button.Primary>

@@ -1,11 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import Input from "@/components/Input/Input";
 import Button from "@/components/Button/Button";
 import sendAxiosRequest from "@/lib/api/sendAxiosRequest";
 import { useAuth } from "@/contexts/AuthProvider";
+import removeAllWhitespace from "@/lib/utils/removeAllWhitespace";
 
 const DEFAULT_PLACEHOLDER =
   "개인정보를 공유 및 요청하거나, 명예 훼손, 무단 광고, 불법 정보 유포시 모니터링 후 삭제될 수 있으며, 이에 대한 민형사상 책임은 게시자에게 있습니다.";
@@ -22,6 +23,7 @@ const CommentInputBox = ({
   placeholder = DEFAULT_PLACEHOLDER,
 }: CommentInputBoxProps) => {
   const [inputValue, setInputValue] = useState("");
+  const [isValidation, setIsValidation] = useState(false);
   const { id } = useParams();
   const { user } = useAuth();
 
@@ -33,16 +35,19 @@ const CommentInputBox = ({
     e.preventDefault();
 
     if (!user) return alert("로그인 후 이용해주세요");
-    if (!inputValue.trim()) return alert("내용을 입력해주세요");
 
     const options = {
       method: "POST",
       url: `articles/${id}/comments`,
-      data: { content: inputValue },
+      data: { content: inputValue.trim() },
     };
     sendAxiosRequest(options);
     setInputValue("");
   };
+
+  useEffect(() => {
+    if (removeAllWhitespace(inputValue)) setIsValidation(true);
+  }, [inputValue]);
 
   return (
     <form
@@ -58,7 +63,11 @@ const CommentInputBox = ({
         onChange={handleChange}
         value={inputValue}
       />
-      <Button.Primary className="ml-auto h-42 w-71 text-14" type="submit">
+      <Button.Primary
+        className="ml-auto h-42 w-71 text-14"
+        type="submit"
+        disabled={!isValidation}
+      >
         등록
       </Button.Primary>
     </form>

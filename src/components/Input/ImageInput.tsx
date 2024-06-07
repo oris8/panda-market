@@ -1,13 +1,13 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import BaseInput from "@/components/Input/BaseInput";
 import DeleteButton from "@/components/DeleteButton";
 import PlusIcon from "/public/images/ic_plus.svg";
 
-export const useSingleImageInput = (initialValue: string = "") => {
-  const [image, setImage] = useState<string>(initialValue);
+export const useSingleImageInput = () => {
+  const [image, setImage] = useState<File | null>(null);
   const [previewImage, setPreviewImage] = useState<string>("");
 
   const handleUploadFile: React.ChangeEventHandler<HTMLInputElement> = (e) => {
@@ -15,17 +15,17 @@ export const useSingleImageInput = (initialValue: string = "") => {
 
     if (!file) return;
 
+    setImage(file);
     const reader = new FileReader();
     reader.onload = () => {
       const fileURL = reader.result as string;
-      setImage(fileURL);
       setPreviewImage(fileURL);
     };
     reader.readAsDataURL(file);
   };
 
   const handleDeleteFile = () => {
-    setImage("");
+    setImage(null);
     setPreviewImage("");
   };
 
@@ -41,7 +41,7 @@ interface ImageInputProps {
   className?: string;
   label: string;
   placeholder?: string;
-  onChange?: (value: string | string[]) => void;
+  onChange?: (value: File | null) => void;
 }
 
 /**
@@ -55,6 +55,14 @@ const ImageInput = ({
 }: ImageInputProps) => {
   const { image, previewImage, handleUploadFile, handleDeleteFile } =
     useSingleImageInput();
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  const handleDelete = () => {
+    handleDeleteFile();
+    if (inputRef.current) {
+      inputRef.current.value = "";
+    }
+  };
 
   useEffect(() => {
     if (onChange) {
@@ -83,7 +91,7 @@ const ImageInput = ({
         <div className="relative h-full min-h-168 w-full min-w-168 rounded-12 xl:h-282 xl:w-282">
           <Image alt="Preview" src={previewImage} fill />
           <DeleteButton
-            onClick={handleDeleteFile}
+            onClick={handleDelete}
             className="absolute right-8 top-8 bg-transparent"
           />
         </div>

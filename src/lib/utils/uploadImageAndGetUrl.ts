@@ -1,16 +1,20 @@
 import sendAxiosRequest from "@/lib/api/sendAxiosRequest";
 
-const uploadImageAndGetUrl = async (image: string) => {
-  try {
-    const form = new FormData();
-    form.append("image", image);
+const uploadImageAndGetUrl = async (image: File) => {
+  if (typeof image === "string") return console.log("file만 받을 수 있습니다");
 
+  try {
+    const formData = new FormData();
+    formData.append("image", image, image.name);
+
+    console.log(formData);
     const response = await sendAxiosRequest({
       method: "POST",
       url: "/images/upload",
-      data: form,
+      data: formData,
+      headers: { "Content-Type": "multipart/form-data" },
     });
-    console.log(response.data.url);
+
     return response.data.url;
   } catch (error) {
     console.error("Error uploading image:", error);

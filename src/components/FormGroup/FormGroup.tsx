@@ -36,9 +36,7 @@ const ErrorMessage = ({
 }: {
   className?: string;
   errorMsg: string;
-}) => (
-  <p className={`error-message hidden text-error ${className}`}>{errorMsg}</p>
-);
+}) => <p className={`error-message text-error ${className}`}>{errorMsg}</p>;
 
 const FormGroup = Object.assign(FormGroupWrapper, {
   Label: Label,
