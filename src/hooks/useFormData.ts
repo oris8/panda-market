@@ -17,7 +17,7 @@ const useFormData = <T extends FormData>(initialData: T = {} as T) => {
     }));
   };
 
-  const handleImageChange = (value: string) => {
+  const handleImageChange = (value: File | string) => {
     setFormData((prevFormData) => ({
       ...prevFormData,
       image: value,

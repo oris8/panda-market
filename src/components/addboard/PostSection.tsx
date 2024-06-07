@@ -40,7 +40,7 @@ const Post = ({ initialData }: { initialData: Post }) => {
       url: `/articles/${id}`,
     };
     await axiosFetcher(options);
-    router.replace("/board");
+    router.replace("/boards");
   };
 
   // 로그인 되어있으면 게시글 like 상태를 불러오는 useEffect

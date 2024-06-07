@@ -41,7 +41,7 @@ interface ImageInputProps {
   className?: string;
   label: string;
   placeholder?: string;
-  onChange?: (value: File | null) => void;
+  onChange?: (value: File | string) => void;
 }
 
 /**
@@ -65,7 +65,7 @@ const ImageInput = ({
   };
 
   useEffect(() => {
-    if (onChange) {
+    if (onChange && image) {
       onChange(image);
     }
   }, [image]);
