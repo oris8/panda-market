@@ -6,4 +6,4 @@ export const BEST_POST_LIMIT: { [key in DeviceSizes]: number } = {
 
 export const POST_LIMIT = 10;
 
-export const POST_COMMENT_LIMIT = 1;
+export const POST_COMMENT_LIMIT = 2;

@@ -5,7 +5,6 @@ import { useParams } from "next/navigation";
 import CommentInput from "@/components/Comment/CommentInput";
 import Comment from "@/components/Comment/Comment";
 import CommentEmpty from "../Comment/CommentEmpty";
-import Pagination from "@/components/Pagination";
 import Button from "@/components/Button/Button";
 import BackIcon from "/public/images/ic_back.svg";
 import useDataFetch from "@/hooks/useDataFetch";
@@ -26,22 +25,11 @@ const CommentSection = ({ initialData }: any) => {
     };
     const res = await axiosFetcher(options);
 
-    if (!res.data.nextCursor) return alert("더이상없어요");
-
-    setValues({
-      list: res.data.list,
+    setValues((prev: { list: Comment[]; nextCursor: number }) => ({
+      ...prev,
+      list: [...prev.list, ...res.data.list],
       nextCursor: res.data.nextCursor,
-    });
-  };
-
-  const goToNext = () => {
-    if (!nextCursor) return;
-    fetchComments(nextCursor);
-  };
-
-  const goToPrev = () => {
-    if (nextCursor - POST_COMMENT_LIMIT * 2 < 0) return;
-    fetchComments(nextCursor - POST_COMMENT_LIMIT * 2);
+    }));
   };
 
   return (
@@ -57,7 +45,14 @@ const CommentSection = ({ initialData }: any) => {
                 isUserComment={(user && comment.writer.id === user.id) || false}
               />
             ))}
-            <Pagination goToPrevPage={goToPrev} goToNextPage={goToNext} />
+            {nextCursor && (
+              <Button
+                className="h-42 w-88 rounded-8 border-1 border-gray-400 text-gray-600"
+                onClick={() => fetchComments(nextCursor)}
+              >
+                .. 댓글 더보기
+              </Button>
+            )}
           </>
         ) : (
           <CommentEmpty />
