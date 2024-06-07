@@ -7,7 +7,6 @@ const uploadImageAndGetUrl = async (image: File) => {
     const formData = new FormData();
     formData.append("image", image, image.name);
 
-    console.log(formData);
     const response = await sendAxiosRequest({
       method: "POST",
       url: "/images/upload",
@@ -17,7 +16,7 @@ const uploadImageAndGetUrl = async (image: File) => {
 
     return response.data.url;
   } catch (error) {
-    console.error("Error uploading image:", error);
+    alert(`Error uploading image: ${error}`);
     throw error;
   }
 };

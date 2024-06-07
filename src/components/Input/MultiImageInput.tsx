@@ -75,7 +75,6 @@ const MultiImageInput = ({
     if (onChange) {
       onChange(images);
     }
-    console.log(images, previewImages);
   }, [images, onChange]);
 
   return (

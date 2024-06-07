@@ -35,7 +35,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       nextUser = res.data;
     } catch (err: any) {
       if (err.response.status === 401) {
-        console.log("로그인 안하셨군용");
+        return;
       }
     } finally {
       setValues((prevValues) => ({

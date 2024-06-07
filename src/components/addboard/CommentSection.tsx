@@ -10,33 +10,39 @@ import Button from "@/components/Button/Button";
 import BackIcon from "/public/images/ic_back.svg";
 import useDataFetch from "@/hooks/useDataFetch";
 import { useAuth } from "@/contexts/AuthProvider";
+import { POST_COMMENT_LIMIT } from "@/constants/pageLimit";
 
 const CommentSection = ({ initialData }: any) => {
   const { user } = useAuth();
   const [values, setValues] = useState(initialData);
   const { nextCursor, list } = values;
   const { axiosFetcher } = useDataFetch();
-  // const { id } = useParams();
+  const { id } = useParams();
 
-  // const goToNext = async () => {
-  //   if (!nextCursor) return;
-  //   const options = {
-  //     method: "GET",
-  //     url: `/articles/${id}/comments?limit=3`,
-  //   };
-  //   const res = await axiosFetcher(options);
-  //   setValues(res);
-  // };
+  const fetchComments = async (cursor?: number) => {
+    const options = {
+      method: "GET",
+      url: `/articles/${id}/comments?limit=${POST_COMMENT_LIMIT}${cursor ? `&cursor=${cursor}` : ""}`,
+    };
+    const res = await axiosFetcher(options);
 
-  // const goToPrev = async () => {
-  //   if (nextCursor - 6 < 0) return;
-  //   const options = {
-  //     method: "GET",
-  //     url: `/articles/${id}/comments?limit=3&cursor=${nextCursor - 6}`,
-  //   };
-  //   const res = await axiosFetcher(options);
-  //   setValues(res);
-  // };
+    if (!res.data.nextCursor) return alert("더이상없어요");
+
+    setValues({
+      list: res.data.list,
+      nextCursor: res.data.nextCursor,
+    });
+  };
+
+  const goToNext = () => {
+    if (!nextCursor) return;
+    fetchComments(nextCursor);
+  };
+
+  const goToPrev = () => {
+    if (nextCursor - POST_COMMENT_LIMIT * 2 < 0) return;
+    fetchComments(nextCursor - POST_COMMENT_LIMIT * 2);
+  };
 
   return (
     <>
@@ -51,7 +57,7 @@ const CommentSection = ({ initialData }: any) => {
                 isUserComment={(user && comment.writer.id === user.id) || false}
               />
             ))}
-            {/* <Pagination goToPrevPage={goToPrev} goToNextPage={goToNext} /> */}
+            <Pagination goToPrevPage={goToPrev} goToNextPage={goToNext} />
           </>
         ) : (
           <CommentEmpty />
