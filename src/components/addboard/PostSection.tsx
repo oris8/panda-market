@@ -30,6 +30,7 @@ const Post = ({ initialData }: { initialData: Post }) => {
 
   const {
     toggleFavoriteButton,
+    updateFavoriteButtonState,
     isFavoriteButtonLiked,
     favoriteButtonLikeCount,
   } = useFavoriteButton("articles", isLiked, likeCount);
@@ -54,6 +55,7 @@ const Post = ({ initialData }: { initialData: Post }) => {
       };
       const res = await axiosFetcher(options);
       setData(res.data);
+      updateFavoriteButtonState(res.data.isLiked, res.data.likeCount);
     };
 
     fetchData();

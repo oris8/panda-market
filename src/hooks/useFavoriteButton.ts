@@ -26,7 +26,6 @@ const useFavoriteButton = (
       };
       await sendAxiosRequest(options);
       setValues((prevValues) => ({
-        ...prevValues,
         isFavoriteButtonLiked: false,
         favoriteButtonLikeCount: prevValues.favoriteButtonLikeCount - 1,
       }));
@@ -38,15 +37,25 @@ const useFavoriteButton = (
       };
       await sendAxiosRequest(options);
       setValues((prevValues) => ({
-        ...prevValues,
         isFavoriteButtonLiked: true,
         favoriteButtonLikeCount: prevValues.favoriteButtonLikeCount + 1,
       }));
     }
   };
 
+  const updateFavoriteButtonState = (
+    newIsLiked: boolean,
+    newLikeCount: number,
+  ) => {
+    setValues({
+      isFavoriteButtonLiked: newIsLiked,
+      favoriteButtonLikeCount: newLikeCount,
+    });
+  };
+
   return {
     toggleFavoriteButton,
+    updateFavoriteButtonState,
     isFavoriteButtonLiked,
     favoriteButtonLikeCount,
   };
