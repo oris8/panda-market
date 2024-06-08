@@ -77,13 +77,13 @@ const UserProfile = ({
   const commentTimeAgo = getTimeAgo(updatedAt);
 
   return (
-    <div className="flex gap-8">
+    <div className="flex items-center gap-8">
       <Image
         src={image || "/images/img_default-profile.svg"}
         alt={`${nickname}의 프로필 이미지`}
         width={40}
         height={40}
-        className="rounded-[50%]"
+        className="h-40 w-40 rounded-[50%]"
       />
       <div>
         <span className="text-400 text-14 text-cool-gray-500">{nickname}</span>
