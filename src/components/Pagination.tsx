@@ -3,19 +3,19 @@ import ArrowLeftIcon from "/public/images/ic_arrow-left.svg";
 
 interface PaginationProps {
   className?: string;
-  currentPage: number;
-  totalPages: number;
-  goToPrevPage: () => void;
+  currentPage?: number;
+  totalPages?: number;
   goToNextPage: () => void;
-  goToPage: (pageNumber: number) => void;
+  goToPrevPage: () => void;
+  goToPage?: (page: number) => void;
 }
 
 const Pagination = ({
-  className = "",
-  currentPage,
-  totalPages,
-  goToPrevPage,
+  className,
+  currentPage = 0,
+  totalPages = 0,
   goToNextPage,
+  goToPrevPage,
   goToPage,
 }: PaginationProps) => {
   const buttonStyle =
@@ -25,7 +25,7 @@ const Pagination = ({
     return Array.from({ length: totalPages }, (_, i) => (
       <button
         key={i + 1}
-        onClick={() => goToPage(i + 1)}
+        onClick={goToPage ? () => goToPage(i + 1) : undefined}
         className={`${buttonStyle} ${
           i + 1 === currentPage ? "bg-blue text-white" : ""
         }`}
@@ -39,7 +39,7 @@ const Pagination = ({
     <div className={`flexcenter w-full ${className}`}>
       <button
         onClick={goToPrevPage}
-        disabled={currentPage === 1}
+        disabled={totalPages ? currentPage === 1 : false}
         className={buttonStyle}
       >
         <ArrowLeftIcon />
@@ -47,7 +47,7 @@ const Pagination = ({
       {renderPageButtons()}
       <button
         onClick={goToNextPage}
-        disabled={currentPage === totalPages}
+        disabled={totalPages ? currentPage === totalPages : false}
         className={buttonStyle}
       >
         <ArrowRightIcon />

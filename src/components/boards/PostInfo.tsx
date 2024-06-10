@@ -1,10 +1,10 @@
 import Image from "next/image";
-import CardFavorites from "@/components/CardFavorite";
+import FavoriteButton from "@/components//FavoriteButton";
 
 interface PostInfoProps {
   showProfile?: boolean;
   writer?: {
-    id: string;
+    id: number;
     nickname: string;
   };
   likeCount?: number;
@@ -22,7 +22,7 @@ const PostInfo = ({
       {showProfile && writer && (
         <div className="mr-8 h-24 w-24">
           <Image
-            src="/images/img_default-profile.png"
+            src="/images/img_default-profile.svg"
             alt="Writer Image"
             width={24}
             height={24}
@@ -40,10 +40,9 @@ const PostInfo = ({
         </div>
       )}
       {likeCount !== undefined && (
-        <CardFavorites
+        <FavoriteButton
           className="postInfoFavorites text-14 font-normal text-cool-gray-500"
-          isFavorite={false}
-          favoriteCount={likeCount}
+          likeCount={likeCount}
         />
       )}
     </>

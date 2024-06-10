@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { AxiosRequestConfig } from "axios";
-import dispatcher from "@/lib/api/dispatcher";
+import sendAxiosRequest from "@/lib/api/sendAxiosRequest";
 
 export default function useDataFetch() {
   const [isLoading, setIsLoading] = useState(false);
@@ -11,7 +11,7 @@ export default function useDataFetch() {
     setError(null);
 
     try {
-      const response = await dispatcher({ ...options });
+      const response = await sendAxiosRequest({ ...options });
       return response;
     } catch (err: any) {
       setError(err);

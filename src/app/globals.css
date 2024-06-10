@@ -99,6 +99,18 @@
   }
 
   @layer components {
+    .primary-button {
+      @apply flex items-center justify-center rounded-8 border-none bg-blue text-16 font-semibold text-white hover:bg-blue-hover focus:outline-none active:bg-blue-active disabled:cursor-not-allowed disabled:bg-disable;
+    }
+
+    .primary-rounded-button {
+      @apply flex items-center justify-center rounded-40 border-none bg-blue text-16 font-semibold text-white hover:bg-blue-hover focus:outline-none active:bg-blue-active disabled:cursor-not-allowed disabled:bg-disable;
+    }
+
+    .primary-outline-button {
+      @apply flex items-center justify-center rounded-8 border-1 border-blue bg-white text-16 font-semibold text-blue focus:outline-none disabled:cursor-not-allowed disabled:bg-disable;
+    }
+
     .flexcenter {
       @apply flex items-center justify-center;
       /* display: flex;
@@ -129,6 +141,12 @@
       text-overflow: ellipsis;
       white-space: normal;
       word-break: break-all; /*영어 단어 줄바꿈 처리를 위해*/
+    }
+
+    .autoImage {
+      object-fit: contain !important;
+      position: relative !important;
+      height: auto !important;
     }
   }
 }

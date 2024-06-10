@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Header from "@/components/Layout/Header";
 import Container from "@/components/Layout/Container";
 import Footer from "@/components/Layout/Footer";
+import { AuthProvider } from "@/contexts/AuthProvider";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -20,9 +21,11 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <body>
-        <Header />
-        <Container>{children}</Container>
-        <Footer />
+        <AuthProvider>
+          <Header />
+          <Container>{children}</Container>
+          <Footer />
+        </AuthProvider>
       </body>
     </html>
   );

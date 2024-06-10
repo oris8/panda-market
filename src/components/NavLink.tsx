@@ -17,7 +17,6 @@ const NavLink = ({
   activeClassName = "",
   inactiveClassName = "",
   className = "",
-  ...rest
 }: NavLinkProps) => {
   const pathname = usePathname();
   const isActive = pathname === href;

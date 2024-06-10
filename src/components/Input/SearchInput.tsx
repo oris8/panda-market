@@ -1,4 +1,4 @@
-import BaseInput from "@/components/BaseInput";
+import BaseInput from "@/components/Input/BaseInput";
 import SearchIcon from "/public/images/ic_search.svg";
 
 interface SearchInputProps {

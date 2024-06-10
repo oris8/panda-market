@@ -1,3 +1,4 @@
+import Link from "next/link";
 import BestBadge from "@/components/boards/BestBadge";
 import PostInfo from "@/components/boards/PostInfo";
 import PostContent from "@/components/boards/PostContent";
@@ -9,7 +10,7 @@ interface BestPostProps {
 }
 
 const BestPost = ({ className = "", data }: BestPostProps) => {
-  const { title, content, image, likeCount, createdAt, writer } = data;
+  const { id, title, content, image, likeCount, createdAt, writer } = data;
 
   return (
     <div
@@ -17,7 +18,9 @@ const BestPost = ({ className = "", data }: BestPostProps) => {
     >
       <BestBadge />
       <div className="mt-16">
-        <PostContent title={title} content={content} image={image} />
+        <Link href={`/addboard/${id}`}>
+          <PostContent title={title} content={content} image={image} />
+        </Link>
       </div>
       <div className="mt-16 grid grid-cols-postInfo grid-areas-postInfo [&>.postInfoCreatedAt]:ml-auto [&>.postInfoCreatedAt]:grid-in-createdAt [&>.postInfoFavorites]:mr-auto [&>.postInfoFavorites]:grid-in-favorites [&>.postInfoWriter]:mr-8 [&>.postInfoWriter]:grid-in-writer">
         <PostInfo
