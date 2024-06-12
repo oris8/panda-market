@@ -1,7 +1,6 @@
 import { useState } from "react";
-import Image from "next/image";
 import BaseDropdown from "@/components/BaseDropdown";
-import getTimeAgo from "@/lib/utils/getTimeAgo";
+import WriterInfo from "@/components/WriterInfo/WriterInfo";
 import sendAxiosRequest from "@/lib/api/sendAxiosRequest";
 import KebabIcon from "/public/images/ic_kebab.svg";
 
@@ -58,39 +57,13 @@ const Comment = ({ comment, isUserComment }: CommentProps) => {
         )}
       </div>
 
-      <UserProfile image={image} nickname={nickname} updatedAt={createdAt} />
-    </div>
-  );
-};
-
-interface UserProfileProps {
-  image?: string;
-  nickname?: string;
-  updatedAt: Date;
-}
-
-const UserProfile = ({
-  image,
-  nickname = "똑똑한 판다",
-  updatedAt,
-}: UserProfileProps) => {
-  const commentTimeAgo = getTimeAgo(updatedAt);
-
-  return (
-    <div className="flex items-center gap-8">
-      <Image
-        src={image || "/images/img_default-profile.svg"}
-        alt={`${nickname}의 프로필 이미지`}
-        width={40}
-        height={40}
-        className="h-40 w-40 rounded-[50%]"
-      />
-      <div>
-        <span className="text-400 text-14 text-cool-gray-500">{nickname}</span>
-        <div className="text-400 mt-4 text-12 text-cool-gray-400 ">
-          {commentTimeAgo}
+      <WriterInfo className="flex items-center gap-8">
+        <WriterInfo.ProfileImage className="" size={40} src={image} />
+        <div>
+          <WriterInfo.Writer nickname={nickname} className="mr-8" />
+          <WriterInfo.UpdatedAt createdAt={createdAt} className="ml-auto" />
         </div>
-      </div>
+      </WriterInfo>
     </div>
   );
 };

@@ -1,4 +1,4 @@
-import Input from "../Input/Input";
+import Input from "@/components/Input/Input";
 
 const FormGroupWrapper = ({
   className,
