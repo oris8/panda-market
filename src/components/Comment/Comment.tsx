@@ -7,20 +7,26 @@ import KebabIcon from "/public/images/ic_kebab.svg";
 interface CommentProps {
   comment: Comment;
   isUserComment: boolean;
+  onCommentDeleted?: (comment: Comment) => void;
 }
 
-const Comment = ({ comment, isUserComment }: CommentProps) => {
+const Comment = ({
+  comment,
+  isUserComment,
+  onCommentDeleted = () => {},
+}: CommentProps) => {
   const [isEditable, setIsEditable] = useState(false);
   const { writer, content, createdAt } = comment;
   const { image, nickname } = writer;
   const id = comment.id;
 
-  const handleDeleteButton = () => {
+  const handleDeleteButton = async () => {
     const options = {
       method: "DELETE",
       url: `/comments/${id}`,
     };
-    sendAxiosRequest(options);
+    const { data } = await sendAxiosRequest(options);
+    onCommentDeleted(data as Comment);
   };
 
   const toggleEditable = () => {

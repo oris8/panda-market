@@ -1,11 +1,11 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useParams } from "next/navigation";
 import Input from "@/components/Input/Input";
 import Button from "@/components/Button/Button";
-import sendAxiosRequest from "@/lib/api/sendAxiosRequest";
 import { useAuth } from "@/contexts/AuthProvider";
+import useDataFetch from "@/hooks/useDataFetch";
 import removeAllWhitespace from "@/lib/utils/removeAllWhitespace";
 
 const DEFAULT_PLACEHOLDER =
@@ -15,23 +15,27 @@ interface CommentInputBoxProps {
   className?: string;
   label?: string;
   placeholder?: string;
+  onCommentAdded?: (comment: Comment) => void;
 }
 
 const CommentInputBox = ({
   className,
   label = "Comment",
   placeholder = DEFAULT_PLACEHOLDER,
+  onCommentAdded = () => {},
 }: CommentInputBoxProps) => {
   const [inputValue, setInputValue] = useState("");
   const [isValidation, setIsValidation] = useState(false);
+  const { isLoading, axiosFetcher } = useDataFetch();
   const { id } = useParams();
   const { user } = useAuth();
 
   const handleChange: React.ChangeEventHandler<HTMLTextAreaElement> = (e) => {
     setInputValue(e.target.value);
+    setIsValidation(!!removeAllWhitespace(e.target.value));
   };
 
-  const handleAddComment: React.FormEventHandler = (e) => {
+  const handleAddComment: React.FormEventHandler = async (e) => {
     e.preventDefault();
 
     if (!user) return alert("로그인 후 이용해주세요");
@@ -41,13 +45,10 @@ const CommentInputBox = ({
       url: `articles/${id}/comments`,
       data: { content: inputValue.trim() },
     };
-    sendAxiosRequest(options);
+    const { data } = await axiosFetcher(options);
     setInputValue("");
+    onCommentAdded(data as Comment);
   };
-
-  useEffect(() => {
-    if (removeAllWhitespace(inputValue)) setIsValidation(true);
-  }, [inputValue]);
 
   return (
     <form
@@ -66,9 +67,9 @@ const CommentInputBox = ({
       <Button.Primary
         className="ml-auto h-42 w-71 text-14"
         type="submit"
-        disabled={!isValidation}
+        disabled={!isValidation || isLoading}
       >
-        등록
+        {isLoading ? "등록 중..." : "등록"}
       </Button.Primary>
     </form>
   );

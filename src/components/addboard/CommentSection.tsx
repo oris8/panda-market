@@ -32,9 +32,33 @@ const CommentSection = ({ initialData }: any) => {
     }));
   };
 
+  const handleCommentAdded = (newComment: Comment) => {
+    setValues((prev: { list: Comment[]; nextCursor: number }) => ({
+      ...prev,
+      list: [newComment, ...prev.list],
+    }));
+  };
+
+  const handleCommentDeleted = (deletedComment: Comment) => {
+    setValues((prev: { list: Comment[]; nextCursor: number }) => {
+      const updatedList = prev.list.filter(
+        (comment) => comment.id !== deletedComment.id,
+      );
+
+      return {
+        ...prev,
+        list: updatedList,
+      };
+    });
+  };
+
   return (
     <>
-      <CommentInput label="댓글 달기" placeholder="댓글을 입력해주세요" />
+      <CommentInput
+        label="댓글 달기"
+        placeholder="댓글을 입력해주세요"
+        onCommentAdded={handleCommentAdded}
+      />
       <div className="mt-24 flex flex-col gap-24 pb-120 ">
         {list.length > 0 ? (
           <>
@@ -43,6 +67,7 @@ const CommentSection = ({ initialData }: any) => {
                 key={comment.id}
                 comment={comment}
                 isUserComment={(user && comment.writer.id === user.id) || false}
+                onCommentDeleted={handleCommentDeleted}
               />
             ))}
             {nextCursor && (
