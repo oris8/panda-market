@@ -1,13 +1,14 @@
 "use client";
 
-import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useForm } from "react-hook-form";
 import Link from "next/link";
 import Image from "next/image";
 import FormGroup from "@/components/FormGroup/FormGroup";
 import Button from "@/components/Button/Button";
 import SocialLogin from "@/components/auth/SocialLogin";
 import { useAuth } from "@/contexts/AuthProvider";
+import { AUTH_ERROR_MESSAGE, AUTH_REGEX } from "@/constants/authValidation";
 
 interface LogInRequest {
   email: string;
@@ -15,28 +16,42 @@ interface LogInRequest {
 }
 
 const LogIn = () => {
-  const [values, setValues] = useState<LogInRequest>({
-    email: "",
-    password: "",
-  });
-  const [isValidation, setIsValidation] = useState();
   const { login } = useAuth(false);
   const router = useRouter();
+  const {
+    register,
+    formState: { errors },
+    handleSubmit,
+  } = useForm<LogInRequest>({
+    mode: "onChange",
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+  });
 
-  const handleChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
-    const { name, value } = e.target;
-    setValues((prevValues) => ({
-      ...prevValues,
-      [name]: value,
-    }));
-  };
+  const emailRegister = register("email", {
+    required: {
+      value: true,
+      message: AUTH_ERROR_MESSAGE.emailRequired,
+    },
+    pattern: {
+      value: AUTH_REGEX.email,
+      message: AUTH_ERROR_MESSAGE.invalidEmailFormat,
+    },
+  });
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const passwordRegister = register("password", {
+    required: { value: true, message: AUTH_ERROR_MESSAGE.passwordRequired },
+    minLength: {
+      value: 8,
+      message: AUTH_ERROR_MESSAGE.passwordMinLength,
+    },
+  });
 
-    const { email, password } = values;
+  const onSubmit = async (data: LogInRequest) => {
     try {
-      await login({ email, password });
+      await login(data);
       router.replace("/");
     } catch (err: any) {
       alert(err.response.data.message);
@@ -56,7 +71,7 @@ const LogIn = () => {
         </div>
       </h1>
 
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit(onSubmit)}>
         <FormGroup>
           <FormGroup.InputWrapper>
             <FormGroup.Label htmlFor="email">이메일</FormGroup.Label>
@@ -64,9 +79,10 @@ const LogIn = () => {
               label="email"
               type="email"
               placeholder="이메일을 입력해주세요"
-              value={values.email}
-              onChange={handleChange}
+              className={`${Boolean(errors?.email?.message) ? "ct--input-error" : ""}`}
+              {...emailRegister}
             />
+            <FormGroup.ErrorMessage errorMsg={errors?.email?.message || null} />
           </FormGroup.InputWrapper>
         </FormGroup>
 
@@ -76,8 +92,11 @@ const LogIn = () => {
             <FormGroup.InputField.Password
               label="password"
               placeholder="비밀번호를 입력해주세요"
-              value={values.password}
-              onChange={handleChange}
+              className={`${Boolean(errors?.password?.message) ? "ct--input-error" : ""}`}
+              {...passwordRegister}
+            />
+            <FormGroup.ErrorMessage
+              errorMsg={errors?.password?.message || null}
             />
           </FormGroup.InputWrapper>
         </FormGroup>
@@ -85,6 +104,7 @@ const LogIn = () => {
         <Button.Primary
           className="mx-w-400 primary-button mt-16 h-44  w-full rounded-36 md:max-w-[640px]"
           type="submit"
+          disabled={Object.keys(errors).length > 0}
         >
           로그인
         </Button.Primary>

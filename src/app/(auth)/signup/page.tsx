@@ -1,7 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useForm } from "react-hook-form";
 import Link from "next/link";
 import Image from "next/image";
 import Button from "@/components/Button/Button";
@@ -9,7 +10,7 @@ import FormGroup from "@/components/FormGroup/FormGroup";
 import SocialLogin from "@/components/auth/SocialLogin";
 import Popup from "@/components/Popup";
 import sendAxiosRequest from "@/lib/api/sendAxiosRequest";
-import { useAuth } from "@/contexts/AuthProvider";
+import { AUTH_ERROR_MESSAGE, AUTH_REGEX } from "@/constants/authValidation";
 
 interface SignUpRequest {
   email: string;
@@ -19,35 +20,78 @@ interface SignUpRequest {
 }
 
 const SignUp = () => {
-  const [values, setValues] = useState<SignUpRequest>({
-    email: "",
-    nickname: "",
-    password: "",
-    passwordConfirmation: "",
-  });
-  const [isValidation, setIsValidation] = useState();
   const [showPopup, setShowPopup] = useState(false);
-  const { user, login } = useAuth(false);
   const router = useRouter();
+  const {
+    register,
+    formState: { errors },
+    watch,
+    setError,
+    clearErrors,
+    handleSubmit,
+  } = useForm<SignUpRequest>({
+    mode: "onChange",
+    defaultValues: {
+      email: "",
+      nickname: "",
+      password: "",
+      passwordConfirmation: "",
+    },
+  });
 
-  const handleChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
-    const { name, value } = e.target;
-    setValues((prevValues) => ({
-      ...prevValues,
-      [name]: value,
-    }));
-  };
+  const emailRegister = register("email", {
+    required: {
+      value: true,
+      message: AUTH_ERROR_MESSAGE.emailRequired,
+    },
+    pattern: {
+      value: AUTH_REGEX.email,
+      message: AUTH_ERROR_MESSAGE.invalidEmailFormat,
+    },
+  });
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const nicknameRegister = register("nickname", {
+    required: { value: true, message: AUTH_ERROR_MESSAGE.nicknameRequired },
+    pattern: {
+      value: AUTH_REGEX.nickname,
+      message: AUTH_ERROR_MESSAGE.invalidNicknameFormat,
+    },
+  });
+
+  const passwordRegister = register("password", {
+    required: { value: true, message: AUTH_ERROR_MESSAGE.passwordRequired },
+    minLength: {
+      value: 8,
+      message: AUTH_ERROR_MESSAGE.passwordMinLength,
+    },
+    validate: (value) => {
+      const passwordConfirmation = watch("passwordConfirmation");
+      if (value !== passwordConfirmation) {
+        setError("passwordConfirmation", {
+          type: "validate",
+          message: AUTH_ERROR_MESSAGE.passwordMismatch,
+        });
+        return false;
+      } else {
+        clearErrors("passwordConfirmation");
+        return true;
+      }
+    },
+  });
+
+  const passwordConfirmationRegister = register("passwordConfirmation", {
+    required: AUTH_ERROR_MESSAGE.passwordMismatch,
+    validate: (value) =>
+      value === watch("password") || AUTH_ERROR_MESSAGE.passwordMismatch,
+  });
+
+  const onSubmit = async (data: SignUpRequest) => {
     try {
       await sendAxiosRequest({
         method: "post",
         url: "/auth/signUp",
-        data: values,
+        data: data,
       });
-      const { email, password } = values;
-      await login({ email, password });
       setShowPopup(true);
     } catch (err: any) {
       alert(err.response.data.message);
@@ -59,12 +103,8 @@ const SignUp = () => {
     router.replace("/");
   };
 
-  useEffect(() => {
-    if (user) router.replace("/");
-  });
-
   return (
-    <div className="mx-auto w-full max-w-400 px-24 md:max-w-[640px]">
+    <div className="mx-auto w-full max-w-400 px-24 py-36 md:max-w-[640px]">
       <h1 className="my-24 flex justify-center md:my-44">
         <div className="relative h-66 w-198 md:h-132 md:w-396">
           <Image
@@ -76,7 +116,7 @@ const SignUp = () => {
         </div>
       </h1>
 
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit(onSubmit)}>
         <FormGroup>
           <FormGroup.InputWrapper>
             <FormGroup.Label htmlFor="email">이메일</FormGroup.Label>
@@ -84,20 +124,24 @@ const SignUp = () => {
               label="email"
               type="email"
               placeholder="이메일을 입력해주세요"
-              value={values.email}
-              onChange={handleChange}
+              className={`${Boolean(errors?.email?.message) ? "ct--input-error" : ""}`}
+              {...emailRegister}
             />
+            <FormGroup.ErrorMessage errorMsg={errors?.email?.message || null} />
           </FormGroup.InputWrapper>
         </FormGroup>
         <FormGroup>
           <FormGroup.InputWrapper>
-            <FormGroup.Label htmlFor="email">닉네임</FormGroup.Label>
+            <FormGroup.Label htmlFor="nickname">닉네임</FormGroup.Label>
             <FormGroup.InputField
               label="nickname"
               type="text"
-              placeholder="이메일을 입력해주세요"
-              value={values.nickname}
-              onChange={handleChange}
+              placeholder="닉네임을 입력해주세요"
+              className={`${Boolean(errors?.nickname?.message) ? "ct--input-error" : ""}`}
+              {...nicknameRegister}
+            />
+            <FormGroup.ErrorMessage
+              errorMsg={errors?.nickname?.message || null}
             />
           </FormGroup.InputWrapper>
         </FormGroup>
@@ -107,19 +151,27 @@ const SignUp = () => {
             <FormGroup.InputField.Password
               label="password"
               placeholder="비밀번호를 입력해주세요"
-              value={values.password}
-              onChange={handleChange}
+              className={`${Boolean(errors?.password?.message) ? "ct--input-error" : ""}`}
+              {...passwordRegister}
+            />
+            <FormGroup.ErrorMessage
+              errorMsg={errors?.password?.message || null}
             />
           </FormGroup.InputWrapper>
         </FormGroup>
         <FormGroup>
           <FormGroup.InputWrapper>
-            <FormGroup.Label htmlFor="password">비밀번호 확인</FormGroup.Label>
+            <FormGroup.Label htmlFor="passwordConfirmation">
+              비밀번호 확인
+            </FormGroup.Label>
             <FormGroup.InputField.Password
               label="passwordConfirmation"
               placeholder="비밀번호를 다시 한 번 입력해주세요"
-              value={values.passwordConfirmation}
-              onChange={handleChange}
+              className={`${Boolean(errors?.passwordConfirmation?.message) ? "ct--input-error" : ""}`}
+              {...passwordConfirmationRegister}
+            />
+            <FormGroup.ErrorMessage
+              errorMsg={errors?.passwordConfirmation?.message || null}
             />
           </FormGroup.InputWrapper>
         </FormGroup>
@@ -127,6 +179,7 @@ const SignUp = () => {
         <Button.Primary
           className="mx-w-400 primary-button mt-16 h-44 w-full rounded-36 md:max-w-[640px]"
           type="submit"
+          disabled={Object.keys(errors).length > 0}
         >
           회원가입
         </Button.Primary>

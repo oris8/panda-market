@@ -70,11 +70,6 @@
     -moz-appearance: none;
     appearance: none;
     margin: 0;
-    border: none;
-  }
-
-  input:focus {
-    outline: none;
   }
 
   input::-ms-clear {
@@ -109,6 +104,10 @@
 
     .primary-outline-button {
       @apply flex items-center justify-center rounded-8 border-1 border-blue bg-white text-16 font-semibold text-blue focus:outline-none disabled:cursor-not-allowed disabled:bg-disable;
+    }
+
+    .ct--input-error {
+      @apply border-1 border-red;
     }
 
     .flexcenter {
