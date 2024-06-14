@@ -27,7 +27,8 @@ const CommentInputBox = ({
   const [inputValue, setInputValue] = useState("");
   const [isValidation, setIsValidation] = useState(false);
   const { isLoading, axiosFetcher } = useDataFetch();
-  const { id } = useParams();
+  const prams = useParams<{ id: string }>();
+  const id = prams?.id;
   const { user } = useAuth();
 
   const handleChange: React.ChangeEventHandler<HTMLTextAreaElement> = (e) => {

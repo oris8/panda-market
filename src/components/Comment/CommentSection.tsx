@@ -1,29 +1,32 @@
-"use client";
-
 import { useState } from "react";
-import { useParams } from "next/navigation";
+import { usePathname } from "next/navigation";
+import Button from "@/components/Button/Button";
 import CommentInput from "@/components/Comment/CommentInput";
 import Comment from "@/components/Comment/Comment";
-import CommentEmpty from "../Comment/CommentEmpty";
-import Button from "@/components/Button/Button";
-import BackIcon from "/public/images/ic_back.svg";
-import useDataFetch from "@/hooks/useDataFetch";
+import CommentEmpty from "@/components/Comment/CommentEmpty";
 import { useAuth } from "@/contexts/AuthProvider";
-import { POST_COMMENT_LIMIT } from "@/constants/pageLimit";
+import BackIcon from "/public/images/ic_back.svg";
 
-const CommentSection = ({ initialData }: any) => {
+interface CommentSectionProps {
+  initialData: { list: Comment[]; nextCursor: number };
+  dataFetcher: (
+    cursor?: number,
+  ) => Promise<{ data: { list: Comment[]; nextCursor: number } }>;
+  returnPath?: string;
+}
+
+const CommentSection = ({
+  initialData,
+  dataFetcher,
+  returnPath = "/",
+}: CommentSectionProps) => {
   const { user } = useAuth();
   const [values, setValues] = useState(initialData);
   const { nextCursor, list } = values;
-  const { axiosFetcher } = useDataFetch();
-  const { id } = useParams();
+  const pathname = usePathname();
 
   const fetchComments = async (cursor?: number) => {
-    const options = {
-      method: "GET",
-      url: `/articles/${id}/comments?limit=${POST_COMMENT_LIMIT}${cursor ? `&cursor=${cursor}` : ""}`,
-    };
-    const res = await axiosFetcher(options);
+    const res = await dataFetcher(cursor);
 
     setValues((prev: { list: Comment[]; nextCursor: number }) => ({
       ...prev,
@@ -33,6 +36,7 @@ const CommentSection = ({ initialData }: any) => {
   };
 
   const handleCommentAdded = (newComment: Comment) => {
+    console.dir(pathname);
     setValues((prev: { list: Comment[]; nextCursor: number }) => ({
       ...prev,
       list: [newComment, ...prev.list],
@@ -72,10 +76,10 @@ const CommentSection = ({ initialData }: any) => {
             ))}
             {nextCursor && (
               <Button
-                className="h-42 w-88 rounded-8 border-1 border-gray-400 text-gray-600"
+                className="mx-auto h-42 w-88 rounded-8 border-1 border-gray-400 text-gray-600"
                 onClick={() => fetchComments(nextCursor)}
               >
-                .. 댓글 더보기
+                .. 더보기
               </Button>
             )}
           </>
@@ -84,7 +88,7 @@ const CommentSection = ({ initialData }: any) => {
         )}
         <Button.Link
           className="primary-rounded-button mx-auto mt-40 h-48 w-240 gap-10 text-18"
-          href="/boards"
+          href={returnPath}
         >
           목록으로 돌아가기
           <BackIcon />

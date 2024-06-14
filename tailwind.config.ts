@@ -84,9 +84,14 @@ const config: Config = {
       gridTemplateAreas: {
         footer: ["menus socials", "copyright copyright"],
         postInfo: ["writer favorites createdAt"],
+        itemsHeader: [
+          "title addButton addButton",
+          "searchBar searchBar sortOption",
+        ],
       },
       gridTemplateColumns: {
         postInfo: "auto auto 1fr",
+        itemsHeader: "1fr 82px 42px",
       },
     },
   },
