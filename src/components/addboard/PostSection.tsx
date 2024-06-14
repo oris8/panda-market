@@ -30,9 +30,10 @@ const Post = ({ initialData }: { initialData: Post }) => {
 
   const {
     toggleFavoriteButton,
+    updateFavoriteButtonState,
     isFavoriteButtonLiked,
     favoriteButtonLikeCount,
-  } = useFavoriteButton("articles", isLiked, likeCount);
+  } = useFavoriteButton("articles/id/like", isLiked, likeCount);
 
   const deletePost = async () => {
     const options = {
@@ -54,6 +55,7 @@ const Post = ({ initialData }: { initialData: Post }) => {
       };
       const res = await axiosFetcher(options);
       setData(res.data);
+      updateFavoriteButtonState(res.data.isLiked, res.data.likeCount);
     };
 
     fetchData();
@@ -65,15 +67,6 @@ const Post = ({ initialData }: { initialData: Post }) => {
       setIsUserPost(true);
     } else setIsUserPost(false);
   }, [user, data]);
-
-  // 좋아요 상태가 변경될 때마다 데이터를 업데이트하는 useEffect
-  useEffect(() => {
-    setData((prevData) => ({
-      ...prevData,
-      isLiked: isFavoriteButtonLiked,
-      likeCount: favoriteButtonLikeCount,
-    }));
-  }, [isFavoriteButtonLiked, favoriteButtonLikeCount]);
 
   return (
     <>
@@ -95,8 +88,8 @@ const Post = ({ initialData }: { initialData: Post }) => {
                 {formatDate(createdAt)}
               </span>
               <FavoriteButton
-                isLiked={isLiked}
-                likeCount={likeCount}
+                isLiked={isFavoriteButtonLiked}
+                likeCount={favoriteButtonLikeCount}
                 onClick={() => toggleFavoriteButton(id)}
               />
             </div>

@@ -8,7 +8,8 @@ const sendLikeRequest = async (method: string, url: string) => {
     method: method,
     url: url,
   };
-  await sendAxiosRequest(options);
+  const res = await sendAxiosRequest(options);
+  return res.data;
 };
 
 const useFavoriteButton = (
@@ -25,13 +26,14 @@ const useFavoriteButton = (
   const { isFavoriteButtonLiked, favoriteButtonLikeCount } = values;
 
   // 좋아요 상태 및 좋아요 수를 업데이트하는 함수
-  const updateFavoriteButtonState = (newLikeState: boolean) => {
-    setValues((prevValues) => ({
-      isFavoriteButtonLiked: newLikeState,
-      favoriteButtonLikeCount: newLikeState
-        ? prevValues.favoriteButtonLikeCount + 1
-        : prevValues.favoriteButtonLikeCount - 1,
-    }));
+  const updateFavoriteButtonState = (
+    newIsLiked: boolean,
+    newLikeCount: number,
+  ) => {
+    setValues({
+      isFavoriteButtonLiked: newIsLiked,
+      favoriteButtonLikeCount: newLikeCount,
+    });
   };
 
   const toggleFavoriteButton = async (id: number) => {
@@ -40,13 +42,11 @@ const useFavoriteButton = (
     try {
       // 좋아요 버튼 상태에 따라 요청 메소드 결정
       const method = isFavoriteButtonLiked ? "DELETE" : "POST";
-      const url = `/${path}/${id}/like`;
+      const url = path.replace("id", id.toString());
 
       // 좋아요 처리 요청
-      await sendLikeRequest(method, url);
-
-      // 좋아요 버튼 상태 및 좋아요 수 업데이트
-      updateFavoriteButtonState(!isFavoriteButtonLiked);
+      const res = await sendLikeRequest(method, url);
+      updateFavoriteButtonState(res.isLiked, res.likeCount);
     } catch (error) {
       alert(error);
     }
@@ -54,6 +54,7 @@ const useFavoriteButton = (
 
   return {
     toggleFavoriteButton,
+    updateFavoriteButtonState,
     isFavoriteButtonLiked,
     favoriteButtonLikeCount,
   };
