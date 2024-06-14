@@ -11,6 +11,7 @@ export const AUTH_ERROR_MESSAGE = {
   invalidNicknameFormat: `닉네임은 ${AUTH_LIMIT.nicknameMinLength}자 이상 ${AUTH_LIMIT.nicknameMaxLength}자 이하이며, 알파벳, 숫자, 밑줄(_)만 포함할 수 있습니다`,
   passwordRequired: "비밀번호를 입력해주세요.",
   passwordMinLength: `비밀번호를 ${AUTH_LIMIT.passwordMinLength}자 이상 입력해주세요.`,
+  passwordConfirmationRequired: "비밀번호를 다시 한 번 입력해주세요.",
   passwordMismatch: "비밀번호가 일치하지 않습니다.",
 };
 

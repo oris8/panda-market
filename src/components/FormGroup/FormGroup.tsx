@@ -41,7 +41,7 @@ const ErrorMessage = ({
     <>
       {errorMsg && (
         <p
-          className={`error-message m-4 text-14 font-medium text-error ${className}`}
+          className={`error-message text-14 font-medium text-error ${className}`}
         >
           {errorMsg}
         </p>

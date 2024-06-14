@@ -39,10 +39,7 @@ const useAuthForm = <T extends LogInRequest | SignUpRequest>(
   });
 
   const emailRegister = register("email", {
-    required: {
-      value: true,
-      message: AUTH_ERROR_MESSAGE.emailRequired,
-    },
+    required: AUTH_ERROR_MESSAGE.emailRequired,
     pattern: {
       value: AUTH_REGEX.email,
       message: AUTH_ERROR_MESSAGE.invalidEmailFormat,
@@ -52,10 +49,8 @@ const useAuthForm = <T extends LogInRequest | SignUpRequest>(
   const nicknameRegister =
     "nickname" in defaultValues
       ? register("nickname", {
-          required: {
-            value: true,
-            message: AUTH_ERROR_MESSAGE.nicknameRequired,
-          },
+          required: AUTH_ERROR_MESSAGE.nicknameRequired,
+
           pattern: {
             value: AUTH_REGEX.nickname,
             message: AUTH_ERROR_MESSAGE.invalidNicknameFormat,
@@ -64,12 +59,17 @@ const useAuthForm = <T extends LogInRequest | SignUpRequest>(
       : null;
 
   // 비밀번호와 비밀번호 확인값이 동일한지 확인하는 함수
-  const validatePasswordMatch = () => {
+  const isValidatePasswordMatch = () => {
     const password = watch("password");
     const passwordConfirmation = watch("passwordConfirmation");
 
     // 비밀번호 확인란이 없으면 바로 return
     if (!passwordConfirmation) return true;
+
+    if (password === passwordConfirmation) {
+      clearErrors("passwordConfirmation");
+      return true;
+    }
 
     if (password !== passwordConfirmation) {
       setError("passwordConfirmation", {
@@ -77,29 +77,26 @@ const useAuthForm = <T extends LogInRequest | SignUpRequest>(
         message: AUTH_ERROR_MESSAGE.passwordMismatch,
       });
       return false;
-    } else {
-      clearErrors("passwordConfirmation");
-      return true;
     }
   };
 
   const passwordRegister = register("password", {
-    required: { value: true, message: AUTH_ERROR_MESSAGE.passwordRequired },
+    required: AUTH_ERROR_MESSAGE.passwordRequired,
     minLength: {
       value: AUTH_LIMIT.passwordMinLength,
       message: AUTH_ERROR_MESSAGE.passwordMinLength,
     },
-    validate: validatePasswordMatch,
+    validate: isValidatePasswordMatch,
   });
 
   const passwordConfirmationRegister =
     "passwordConfirmation" in defaultValues
       ? register("passwordConfirmation", {
-          required: {
-            value: true,
-            message: AUTH_ERROR_MESSAGE.passwordMismatch,
+          required: AUTH_ERROR_MESSAGE.passwordConfirmationRequired,
+          validate: () => {
+            if (!isValidatePasswordMatch())
+              return AUTH_ERROR_MESSAGE.passwordMismatch;
           },
-          validate: validatePasswordMatch,
         })
       : null;
 

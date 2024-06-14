@@ -42,32 +42,27 @@ const LogIn = () => {
 
       <form onSubmit={handleSubmit(onSubmit)}>
         <FormGroup>
-          <FormGroup.InputWrapper>
-            <FormGroup.Label htmlFor="email">이메일</FormGroup.Label>
-            <FormGroup.InputField
-              label="email"
-              type="email"
-              placeholder="이메일을 입력해주세요"
-              className={`${Boolean(errors?.email?.message) ? "ct--input-error" : ""}`}
-              {...emailRegister}
-            />
-            <FormGroup.ErrorMessage errorMsg={errors?.email?.message || null} />
-          </FormGroup.InputWrapper>
+          <FormGroup.Label htmlFor="email">이메일</FormGroup.Label>
+          <FormGroup.InputField
+            label="email"
+            type="email"
+            placeholder="이메일을 입력해주세요"
+            className={`${Boolean(errors?.email?.message) ? "ct--input-error" : ""}`}
+            {...emailRegister}
+          />
+          <FormGroup.ErrorMessage errorMsg={errors?.email?.message || null} />
         </FormGroup>
-
         <FormGroup>
-          <FormGroup.InputWrapper>
-            <FormGroup.Label htmlFor="password">비밀번호</FormGroup.Label>
-            <FormGroup.InputField.Password
-              label="password"
-              placeholder="비밀번호를 입력해주세요"
-              className={`${Boolean(errors?.password?.message) ? "ct--input-error" : ""}`}
-              {...passwordRegister}
-            />
-            <FormGroup.ErrorMessage
-              errorMsg={errors?.password?.message || null}
-            />
-          </FormGroup.InputWrapper>
+          <FormGroup.Label htmlFor="password">비밀번호</FormGroup.Label>
+          <FormGroup.InputField.Password
+            label="password"
+            placeholder="비밀번호를 입력해주세요"
+            className={`${Boolean(errors?.password?.message) ? "ct--input-error" : ""}`}
+            {...passwordRegister}
+          />
+          <FormGroup.ErrorMessage
+            errorMsg={errors?.password?.message || null}
+          />
         </FormGroup>
 
         <Button.Primary

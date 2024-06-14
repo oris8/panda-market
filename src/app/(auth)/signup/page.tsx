@@ -61,62 +61,54 @@ const SignUp = () => {
 
       <form onSubmit={handleSubmit(onSubmit)}>
         <FormGroup>
-          <FormGroup.InputWrapper>
-            <FormGroup.Label htmlFor="email">이메일</FormGroup.Label>
-            <FormGroup.InputField
-              label="email"
-              type="email"
-              placeholder="이메일을 입력해주세요"
-              className={`${Boolean(errors?.email?.message) ? "ct--input-error" : ""}`}
-              {...emailRegister}
-            />
-            <FormGroup.ErrorMessage errorMsg={errors?.email?.message || null} />
-          </FormGroup.InputWrapper>
+          <FormGroup.Label htmlFor="email">이메일</FormGroup.Label>
+          <FormGroup.InputField
+            label="email"
+            type="email"
+            placeholder="이메일을 입력해주세요"
+            className={`${Boolean(errors?.email?.message) ? "ct--input-error" : ""}`}
+            {...emailRegister}
+          />
+          <FormGroup.ErrorMessage errorMsg={errors?.email?.message || null} />
         </FormGroup>
         <FormGroup>
-          <FormGroup.InputWrapper>
-            <FormGroup.Label htmlFor="nickname">닉네임</FormGroup.Label>
-            <FormGroup.InputField
-              label="nickname"
-              type="text"
-              placeholder="닉네임을 입력해주세요"
-              className={`${Boolean(errors?.nickname?.message) ? "ct--input-error" : ""}`}
-              {...nicknameRegister}
-            />
-            <FormGroup.ErrorMessage
-              errorMsg={errors?.nickname?.message || null}
-            />
-          </FormGroup.InputWrapper>
+          <FormGroup.Label htmlFor="nickname">닉네임</FormGroup.Label>
+          <FormGroup.InputField
+            label="nickname"
+            type="text"
+            placeholder="닉네임을 입력해주세요"
+            className={`${Boolean(errors?.nickname?.message) ? "ct--input-error" : ""}`}
+            {...nicknameRegister}
+          />
+          <FormGroup.ErrorMessage
+            errorMsg={errors?.nickname?.message || null}
+          />
         </FormGroup>
         <FormGroup>
-          <FormGroup.InputWrapper>
-            <FormGroup.Label htmlFor="password">비밀번호</FormGroup.Label>
-            <FormGroup.InputField.Password
-              label="password"
-              placeholder="비밀번호를 입력해주세요"
-              className={`${Boolean(errors?.password?.message) ? "ct--input-error" : ""}`}
-              {...passwordRegister}
-            />
-            <FormGroup.ErrorMessage
-              errorMsg={errors?.password?.message || null}
-            />
-          </FormGroup.InputWrapper>
+          <FormGroup.Label htmlFor="password">비밀번호</FormGroup.Label>
+          <FormGroup.InputField.Password
+            label="password"
+            placeholder="비밀번호를 입력해주세요"
+            className={`${Boolean(errors?.password?.message) ? "ct--input-error" : ""}`}
+            {...passwordRegister}
+          />
+          <FormGroup.ErrorMessage
+            errorMsg={errors?.password?.message || null}
+          />
         </FormGroup>
         <FormGroup>
-          <FormGroup.InputWrapper>
-            <FormGroup.Label htmlFor="passwordConfirmation">
-              비밀번호 확인
-            </FormGroup.Label>
-            <FormGroup.InputField.Password
-              label="passwordConfirmation"
-              placeholder="비밀번호를 다시 한 번 입력해주세요"
-              className={`${Boolean(errors?.passwordConfirmation?.message) ? "ct--input-error" : ""}`}
-              {...passwordConfirmationRegister}
-            />
-            <FormGroup.ErrorMessage
-              errorMsg={errors?.passwordConfirmation?.message || null}
-            />
-          </FormGroup.InputWrapper>
+          <FormGroup.Label htmlFor="passwordConfirmation">
+            비밀번호 확인
+          </FormGroup.Label>
+          <FormGroup.InputField.Password
+            label="passwordConfirmation"
+            placeholder="비밀번호를 다시 한 번 입력해주세요"
+            className={`${Boolean(errors?.passwordConfirmation?.message) ? "ct--input-error" : ""}`}
+            {...passwordConfirmationRegister}
+          />
+          <FormGroup.ErrorMessage
+            errorMsg={errors?.passwordConfirmation?.message || null}
+          />
         </FormGroup>
 
         <Button.Primary
