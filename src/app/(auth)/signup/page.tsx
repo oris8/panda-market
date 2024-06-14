@@ -2,87 +2,30 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { useForm } from "react-hook-form";
 import Link from "next/link";
 import Image from "next/image";
 import Button from "@/components/Button/Button";
 import FormGroup from "@/components/FormGroup/FormGroup";
 import SocialLogin from "@/components/auth/SocialLogin";
 import Popup from "@/components/Popup";
+import useAuthForm, { SignUpRequest } from "@/hooks/useAuthForm";
 import sendAxiosRequest from "@/lib/api/sendAxiosRequest";
-import { AUTH_ERROR_MESSAGE, AUTH_REGEX } from "@/constants/authValidation";
-
-interface SignUpRequest {
-  email: string;
-  nickname: string;
-  password: string;
-  passwordConfirmation: string;
-}
 
 const SignUp = () => {
   const [showPopup, setShowPopup] = useState(false);
   const router = useRouter();
   const {
-    register,
-    formState: { errors },
-    watch,
-    setError,
-    clearErrors,
     handleSubmit,
-  } = useForm<SignUpRequest>({
-    mode: "onChange",
-    defaultValues: {
-      email: "",
-      nickname: "",
-      password: "",
-      passwordConfirmation: "",
-    },
-  });
-
-  const emailRegister = register("email", {
-    required: {
-      value: true,
-      message: AUTH_ERROR_MESSAGE.emailRequired,
-    },
-    pattern: {
-      value: AUTH_REGEX.email,
-      message: AUTH_ERROR_MESSAGE.invalidEmailFormat,
-    },
-  });
-
-  const nicknameRegister = register("nickname", {
-    required: { value: true, message: AUTH_ERROR_MESSAGE.nicknameRequired },
-    pattern: {
-      value: AUTH_REGEX.nickname,
-      message: AUTH_ERROR_MESSAGE.invalidNicknameFormat,
-    },
-  });
-
-  const passwordRegister = register("password", {
-    required: { value: true, message: AUTH_ERROR_MESSAGE.passwordRequired },
-    minLength: {
-      value: 8,
-      message: AUTH_ERROR_MESSAGE.passwordMinLength,
-    },
-    validate: (value) => {
-      const passwordConfirmation = watch("passwordConfirmation");
-      if (value !== passwordConfirmation) {
-        setError("passwordConfirmation", {
-          type: "validate",
-          message: AUTH_ERROR_MESSAGE.passwordMismatch,
-        });
-        return false;
-      } else {
-        clearErrors("passwordConfirmation");
-        return true;
-      }
-    },
-  });
-
-  const passwordConfirmationRegister = register("passwordConfirmation", {
-    required: AUTH_ERROR_MESSAGE.passwordMismatch,
-    validate: (value) =>
-      value === watch("password") || AUTH_ERROR_MESSAGE.passwordMismatch,
+    emailRegister,
+    nicknameRegister,
+    passwordRegister,
+    passwordConfirmationRegister,
+    errors,
+  } = useAuthForm<SignUpRequest>("onChange", {
+    email: "",
+    nickname: "",
+    password: "",
+    passwordConfirmation: "",
   });
 
   const onSubmit = async (data: SignUpRequest) => {
@@ -100,7 +43,7 @@ const SignUp = () => {
 
   const handlePopupClose = () => {
     setShowPopup(false);
-    router.replace("/");
+    router.replace("/login");
   };
 
   return (

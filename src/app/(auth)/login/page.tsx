@@ -1,53 +1,22 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useForm } from "react-hook-form";
 import Link from "next/link";
 import Image from "next/image";
 import FormGroup from "@/components/FormGroup/FormGroup";
 import Button from "@/components/Button/Button";
 import SocialLogin from "@/components/auth/SocialLogin";
+import useAuthForm, { LogInRequest } from "@/hooks/useAuthForm";
 import { useAuth } from "@/contexts/AuthProvider";
-import { AUTH_ERROR_MESSAGE, AUTH_REGEX } from "@/constants/authValidation";
-
-interface LogInRequest {
-  email: string;
-  password: string;
-}
 
 const LogIn = () => {
   const { login } = useAuth(false);
   const router = useRouter();
-  const {
-    register,
-    formState: { errors },
-    handleSubmit,
-  } = useForm<LogInRequest>({
-    mode: "onChange",
-    defaultValues: {
+  const { handleSubmit, emailRegister, passwordRegister, errors } =
+    useAuthForm<LogInRequest>("onChange", {
       email: "",
       password: "",
-    },
-  });
-
-  const emailRegister = register("email", {
-    required: {
-      value: true,
-      message: AUTH_ERROR_MESSAGE.emailRequired,
-    },
-    pattern: {
-      value: AUTH_REGEX.email,
-      message: AUTH_ERROR_MESSAGE.invalidEmailFormat,
-    },
-  });
-
-  const passwordRegister = register("password", {
-    required: { value: true, message: AUTH_ERROR_MESSAGE.passwordRequired },
-    minLength: {
-      value: 8,
-      message: AUTH_ERROR_MESSAGE.passwordMinLength,
-    },
-  });
+    });
 
   const onSubmit = async (data: LogInRequest) => {
     try {
@@ -102,7 +71,7 @@ const LogIn = () => {
         </FormGroup>
 
         <Button.Primary
-          className="mx-w-400 primary-button mt-16 h-44  w-full rounded-36 md:max-w-[640px]"
+          className="mx-w-400 primary-button mt-16 h-44 w-full rounded-36 md:max-w-[640px]"
           type="submit"
           disabled={Object.keys(errors).length > 0}
         >
