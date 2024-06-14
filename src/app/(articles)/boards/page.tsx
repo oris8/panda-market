@@ -2,24 +2,24 @@ import BestPostList from "@/components/boards/BestPostList";
 import NormalPostList from "@/components/boards/NormalPostList";
 import Button from "@/components/Button/Button";
 import sendAxiosRequest from "@/lib/api/sendAxiosRequest";
-import { SortOptionsKeys } from "@/types/SortOptions";
+import { PostSortOptionsKeys } from "@/types/SortOptions";
 import { BEST_POST_LIMIT } from "@/constants/pageLimit";
 import { POST_LIMIT } from "@/constants/pageLimit";
 
 const INITIAL_POST_PARAMS = {
   pageSize: POST_LIMIT,
-  order: "recent" as SortOptionsKeys,
+  order: "recent" as PostSortOptionsKeys,
 };
 const INITIAL_BEST_POST_PARAMS = {
   pageSize: BEST_POST_LIMIT["large"],
-  order: "like" as SortOptionsKeys,
+  order: "like" as PostSortOptionsKeys,
 };
 
 interface BoardsProps {
   searchParams: {
     page?: number;
     keyword?: string;
-    order?: SortOptionsKeys;
+    order?: PostSortOptionsKeys;
   };
 }
 

@@ -1,13 +1,14 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { usePathname, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import Image from "next/image";
 import SearchInput from "@/components/Input/SearchInput";
 import SortDropdown from "@/components/SortDropdown";
 import NormalPost from "@/components/boards/NormalPost";
 import Pagination from "@/components/Pagination";
-import { SortOptionsKeys } from "@/types/SortOptions";
+import usePagination from "@/hooks/usePagination";
+import { POST_SORT_OPTIONS, PostSortOptionsKeys } from "@/types/SortOptions";
 import { POST_LIMIT } from "@/constants/pageLimit";
 
 interface NormalPostListProps {
@@ -21,50 +22,41 @@ const NormalPostList = ({
   data,
   keyword,
 }: NormalPostListProps) => {
-  const router = useRouter();
   const { totalCount, list } = data;
-  const pathname = usePathname();
   const searchParams = useSearchParams();
-  const currentPageNumber = Number(searchParams.get("page")) || 1;
+  const router = useRouter();
+  const params = new URLSearchParams(searchParams ? searchParams : undefined);
+  const order = params.get("order") as PostSortOptionsKeys;
 
-  const params = new URLSearchParams(searchParams);
-  const order = params.get("order") as SortOptionsKeys;
+  const {
+    currentPageNumber,
+    totalPages,
+    goToNextPage,
+    goToPrevPage,
+    goToPage,
+  } = usePagination(totalCount, POST_LIMIT);
 
   const handleSearch = (query: string) => {
     router.replace(`/boards?keyword=${query}`);
   };
 
-  const handleOrder = (order: SortOptionsKeys) => {
+  const handleOrder = (order: PostSortOptionsKeys) => {
     router.replace(`/boards?order=${order}`);
-  };
-
-  const createPageURL = (pageNumber: number | string) => {
-    const params = new URLSearchParams(searchParams);
-    params.set("page", pageNumber.toString());
-    return `${pathname}?${params.toString()}`;
-  };
-
-  const totalPages = Math.ceil(totalCount / POST_LIMIT);
-
-  const goToNextPage = () => {
-    router.replace(createPageURL(currentPageNumber + 1));
-  };
-  const goToPrevPage = () => {
-    router.replace(createPageURL(currentPageNumber - 1));
-  };
-  const goToPage = (number: number) => {
-    router.replace(createPageURL(number));
   };
 
   return (
     <>
       <div className="flex items-center justify-between gap-8 md:gap-16">
         <SearchInput
-          placeholder="검색할 상품을 입력해주세요"
+          placeholder="검색할 게시글을 입력해주세요"
           defaultValue={keyword ? keyword : ""}
           onKeyDown={handleSearch}
         />
-        <SortDropdown order={order ? order : "recent"} onClick={handleOrder} />
+        <SortDropdown
+          order={order ? order : "recent"}
+          options={POST_SORT_OPTIONS}
+          onClick={handleOrder}
+        />
       </div>
       <div className={`flex h-auto min-h-480 flex-col ${className}`}>
         {list && list.length !== 0 ? (
