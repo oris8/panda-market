@@ -8,7 +8,7 @@ import { ITEM_COMMENT_LIMIT } from "@/constants/pageLimit";
 const ItemCommentSection = ({
   initialData,
 }: {
-  initialData: { list: Comment[]; nextCursor: number };
+  initialData: CommentResponse;
 }) => {
   const { axiosFetcher } = useDataFetch();
   const prams = useParams<{ id: string }>();
@@ -19,8 +19,8 @@ const ItemCommentSection = ({
       method: "GET",
       url: `/products/${id}/comments?limit=${ITEM_COMMENT_LIMIT}${cursor ? `&cursor=${cursor}` : ""}`,
     };
-    const res = await axiosFetcher(options);
-    return res;
+    const { data } = await axiosFetcher(options);
+    return data;
   };
 
   return (

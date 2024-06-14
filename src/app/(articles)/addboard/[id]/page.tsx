@@ -19,8 +19,7 @@ const Page = async ({ params }: { params: { id: string } }) => {
     throw new Error("Failed to fetch data");
   }
   const postData: Post = await postResponse.json();
-  const commentsData: { nextCursor: number; list: Comment[] } =
-    await commentsResponse.json();
+  const commentsData: CommentResponse = await commentsResponse.json();
 
   return (
     <div className="h-auto">

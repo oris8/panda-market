@@ -8,10 +8,8 @@ import { useAuth } from "@/contexts/AuthProvider";
 import BackIcon from "/public/images/ic_back.svg";
 
 interface CommentSectionProps {
-  initialData: { list: Comment[]; nextCursor: number };
-  dataFetcher: (
-    cursor?: number,
-  ) => Promise<{ data: { list: Comment[]; nextCursor: number } }>;
+  initialData: CommentResponse;
+  dataFetcher: (cursor?: number) => Promise<CommentResponse>;
   returnPath?: string;
 }
 
@@ -26,25 +24,25 @@ const CommentSection = ({
   const pathname = usePathname();
 
   const fetchComments = async (cursor?: number) => {
-    const res = await dataFetcher(cursor);
+    const data = await dataFetcher(cursor);
 
-    setValues((prev: { list: Comment[]; nextCursor: number }) => ({
+    setValues((prev) => ({
       ...prev,
-      list: [...prev.list, ...res.data.list],
-      nextCursor: res.data.nextCursor,
+      list: [...prev.list, ...data.list],
+      nextCursor: data.nextCursor,
     }));
   };
 
   const handleCommentAdded = (newComment: Comment) => {
     console.dir(pathname);
-    setValues((prev: { list: Comment[]; nextCursor: number }) => ({
+    setValues((prev) => ({
       ...prev,
       list: [newComment, ...prev.list],
     }));
   };
 
   const handleCommentDeleted = (deletedComment: Comment) => {
-    setValues((prev: { list: Comment[]; nextCursor: number }) => {
+    setValues((prev) => {
       const updatedList = prev.list.filter(
         (comment) => comment.id !== deletedComment.id,
       );

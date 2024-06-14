@@ -11,3 +11,8 @@ interface Comment {
   content: string;
   id: number;
 }
+
+interface CommentResponse {
+  list: Comment[];
+  nextCursor: number;
+}
