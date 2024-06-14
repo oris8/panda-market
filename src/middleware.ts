@@ -6,7 +6,7 @@ export function middleware(request: NextRequest) {
   const token = request.cookies.get("accessToken");
 
   // 로그인 안되어있는 경우 접근제한
-  if (pathname.startsWith("/addboard")) {
+  if (pathname === "/addboard") {
     if (!token) {
       return NextResponse.redirect(new URL("/login", request.url));
     }
@@ -21,5 +21,5 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/addboard/:path*", "/login", "/signup"],
+  matcher: ["/addboard", "/login", "/signup"],
 };
