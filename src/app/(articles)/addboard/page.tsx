@@ -20,8 +20,11 @@ const AddBoard = () => {
   const [isValidation, setIsValidation] = useState(false);
   const { user } = useAuth(true);
   const router = useRouter();
-  const { formData, handleChange, handleImageChange } =
-    useFormData<PostRequestType>();
+  const { formData, handleChange, handleImageChange } = useFormData({
+    title: "",
+    content: "",
+    image: "",
+  } as PostRequestType);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

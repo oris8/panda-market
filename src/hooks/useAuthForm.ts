@@ -20,7 +20,7 @@ export interface SignUpRequest {
 type Mode = "onChange" | "onBlur" | "onSubmit" | "onTouched" | "all";
 
 type AuthKey = "email" | "nickname" | "password" | "passwordConfirmation";
-type RecordAuth = Record<AuthKey, string>;
+type AuthFormValues = Record<AuthKey, string>;
 
 const useAuthForm = <T extends LogInRequest | SignUpRequest>(
   mode: Mode,
@@ -33,7 +33,7 @@ const useAuthForm = <T extends LogInRequest | SignUpRequest>(
     setError,
     clearErrors,
     handleSubmit,
-  } = useForm<RecordAuth>({
+  } = useForm<AuthFormValues>({
     mode: mode || "onChange",
     defaultValues,
   });
