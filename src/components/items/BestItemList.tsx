@@ -12,20 +12,18 @@ interface BestItemListProps {
 
 const BestItemList = ({ className = "", data }: BestItemListProps) => {
   const deviceSize = useDeviceSize();
-  const sliceData = data.slice(0, BEST_ITEM_LIMIT[deviceSize]);
+  const slicedItems = data.slice(0, BEST_ITEM_LIMIT[deviceSize]);
 
   return (
     <div className={`${className}`}>
       <div className="text-20 font-bold text-cool-gray-800">베스트 상품</div>
       <div>
         {data && data.length !== 0 ? (
-          <>
-            <div className="flex justify-between gap-8">
-              {sliceData.map((item: Item) => (
-                <ItemCard key={item.id} data={item} className={`w-full`} />
-              ))}
-            </div>
-          </>
+          <div className="flex justify-between gap-8">
+            {slicedItems.map((item: Item) => (
+              <ItemCard key={item.id} data={item} className={`w-full`} />
+            ))}
+          </div>
         ) : (
           <div className="flexcenter mt-88 flex-col py-16 text-20 font-medium text-gray-500">
             <Image

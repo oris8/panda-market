@@ -46,6 +46,8 @@ const NormalItemList = ({
     router.replace(`/items?order=${order}`);
   };
 
+  const slicedItems = list.slice(0, ITEM_LIMIT[deviceSize]);
+
   return (
     <>
       <div className="grid-areas-itemsHeader grid-cols-itemsHeader mb-16 grid gap-8 md:flex md:items-center">
@@ -76,7 +78,7 @@ const NormalItemList = ({
         {list && list.length !== 0 ? (
           <>
             <div className="flex flex-wrap justify-between gap-4">
-              {list.slice(0, ITEM_LIMIT[deviceSize]).map((item: Item) => (
+              {slicedItems.map((item: Item) => (
                 <ItemCard
                   key={item.id}
                   data={item}
