@@ -1,7 +1,7 @@
 "use client";
 
 import useFavoriteButton from "@/hooks/useFavoriteButton";
-import FavoriteButton from "../FavoriteButton";
+import FavoriteButton from "../Button/FavoriteButton";
 
 interface ItemFavoriteButtonProps {
   id: number;

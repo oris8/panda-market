@@ -1,5 +1,7 @@
-import NormalItemList from "@/components/items/NormalItemList";
-import BestItemList from "@/components/items/BestItemList";
+import {
+  BestItemList,
+  NormalItemList,
+} from "@/components/PageComponents/items";
 import sendAxiosRequest from "@/lib/api/sendAxiosRequest";
 import { ItemSortOptionsKeys } from "@/types/SortOptions";
 import { BEST_ITEM_LIMIT, ITEM_LIMIT } from "@/constants/pageLimit";

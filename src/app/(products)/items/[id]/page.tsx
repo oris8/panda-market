@@ -1,5 +1,7 @@
-import ItemDetailSection from "@/components/items/ItemDetailSection";
-import ItemCommentSection from "@/components/items/ItemCommentSection";
+import {
+  ItemDetailSection,
+  ItemCommentSection,
+} from "@/components/PageComponents/items";
 import { APP_BASE_URL } from "@/constants/common";
 import { ITEM_COMMENT_LIMIT } from "@/constants/pageLimit";
 

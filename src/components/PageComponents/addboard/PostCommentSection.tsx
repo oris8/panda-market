@@ -5,7 +5,7 @@ import CommentSection from "@/components/Comment/CommentSection";
 import useDataFetch from "@/hooks/useDataFetch";
 import { POST_COMMENT_LIMIT } from "@/constants/pageLimit";
 
-const BoardCommentSection = ({
+const PostCommentSection = ({
   initialData,
 }: {
   initialData: CommentResponse;
@@ -14,7 +14,7 @@ const BoardCommentSection = ({
   const prams = useParams<{ id: string }>();
   const id = prams?.id;
 
-  const fetchBoardComments = async (cursor?: number) => {
+  const fetchPostComments = async (cursor?: number) => {
     const options = {
       method: "GET",
       url: `/articles/${id}/comments?limit=${POST_COMMENT_LIMIT}${cursor ? `&cursor=${cursor}` : ""}`,
@@ -27,11 +27,11 @@ const BoardCommentSection = ({
     <>
       <CommentSection
         initialData={initialData}
-        dataFetcher={fetchBoardComments}
+        dataFetcher={fetchPostComments}
         returnPath="/boards"
       />
     </>
   );
 };
 
-export default BoardCommentSection;
+export default PostCommentSection;

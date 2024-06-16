@@ -3,10 +3,10 @@
 import { useRouter, useSearchParams } from "next/navigation";
 import Image from "next/image";
 import Button from "@/components/Button/Button";
-import SortDropdown from "@/components/SortDropdown";
+import SortDropdown from "@/components/Dropdown/SortDropdown";
 import Input from "@/components/Input/Input";
 import Pagination from "@/components/Pagination";
-import ItemCard from "@/components/items/ItemCard";
+import ItemCard from "@/components/Item/ItemCard";
 import useDeviceSize from "@/hooks/useDeviceSize";
 import usePagination from "@/hooks/usePagination";
 import { ITEM_LIMIT } from "@/constants/pageLimit";
@@ -50,18 +50,18 @@ const NormalItemList = ({
 
   return (
     <>
-      <div className="grid-areas-itemsHeader grid-cols-itemsHeader mb-16 grid gap-8 md:flex md:items-center">
-        <h2 className="grid-in-title my-auto mr-auto shrink-0 text-20 font-bold text-cool-gray-800">
+      <div className="mb-16 grid grid-cols-itemsHeader gap-8 grid-areas-itemsHeader md:flex md:items-center">
+        <h2 className="my-auto mr-auto shrink-0 text-20 font-bold text-cool-gray-800 grid-in-title">
           판매중인 상품
         </h2>
         <Input.Search
           placeholder="검색할 상품을 입력해주세요"
           defaultValue={keyword ? keyword : ""}
           onKeyDown={handleSearch}
-          className="grid-in-searchBar w-full md:w-242"
+          className="w-full grid-in-searchBar md:w-242"
         />
         <Button.Link
-          className="primary-button grid-in-addButton h-42 w-133"
+          className="ct--primary-button h-42 w-133 shrink-0 grid-in-addButton"
           href="/additem"
         >
           상품 등록하기
@@ -70,7 +70,7 @@ const NormalItemList = ({
           order={order ? order : "recent"}
           onClick={handleOrder}
           options={ITEM_SORT_OPTIONS}
-          className="grid-in-sortOption mx-auto md:m-0"
+          className="mx-auto grid-in-sortOption md:m-0"
         />
       </div>
 

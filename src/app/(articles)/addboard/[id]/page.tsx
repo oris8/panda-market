@@ -1,5 +1,7 @@
-import PostSection from "@/components/addboard/PostSection";
-import BoardCommentSection from "@/components/addboard/BoardCommentSection";
+import {
+  PostDetailSection,
+  PostCommentSection,
+} from "@/components/PageComponents/addboard";
 import { APP_BASE_URL } from "@/constants/common";
 import { POST_COMMENT_LIMIT } from "@/constants/pageLimit";
 
@@ -23,8 +25,8 @@ const Page = async ({ params }: { params: { id: string } }) => {
 
   return (
     <div className="h-auto">
-      <PostSection initialData={postData} />
-      <BoardCommentSection initialData={commentsData} />
+      <PostDetailSection initialData={postData} />
+      <PostCommentSection initialData={commentsData} />
     </div>
   );
 };

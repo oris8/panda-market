@@ -1,6 +1,13 @@
-import ItemFavoriteButton from "@/components/items/ItemFavoriteButton";
-import ItemCardImage from "@/components/items/ItemCardImage";
-import ItemTag from "@/components/items/ItemTag";
+"use client";
+
+import ItemFavoriteButton from "@/components/Item/ItemFavoriteButton";
+import ItemCardImage from "@/components/Item/ItemCardImage";
+import ItemTag from "@/components/Item/ItemTag";
+import { useAuth } from "@/contexts/AuthProvider";
+import { useEffect, useState } from "react";
+import useDataFetch from "@/hooks/useDataFetch";
+import Button from "../../Button/Button";
+import { useRouter } from "next/navigation";
 
 const ItemDetailSection = ({ initialData }: { initialData: Item }) => {
   const {
@@ -14,7 +21,29 @@ const ItemDetailSection = ({ initialData }: { initialData: Item }) => {
     favoriteCount,
   } = initialData;
 
+  const [data, setData] = useState<Item>(initialData);
+  const [isUserItem, setIsUserItem] = useState(false);
+  const { user } = useAuth();
+  const { isLoading, axiosFetcher } = useDataFetch();
+  const router = useRouter();
+
   const formatPrice = price.toLocaleString();
+
+  const deleteItem = async () => {
+    const options = {
+      method: "DELETE",
+      url: `/products/${id}`,
+    };
+    await axiosFetcher(options);
+    router.replace("/items");
+  };
+
+  // 본인 게시글인지 판단하는 useEffect
+  useEffect(() => {
+    if (user && data?.ownerId === user.id) {
+      setIsUserItem(true);
+    } else setIsUserItem(false);
+  }, [user, data]);
 
   return (
     <div className="flex flex-col gap-4 border-b border-gray-300 md:flex-row md:border-none">
@@ -49,6 +78,7 @@ const ItemDetailSection = ({ initialData }: { initialData: Item }) => {
           />
         </div>
       </div>
+      {isUserItem && <Button onClick={deleteItem}>삭제</Button>}
     </div>
   );
 };

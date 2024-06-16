@@ -1,4 +1,4 @@
-import DeleteButton from "@/components/DeleteButton";
+import DeleteButton from "@/components/Button/DeleteButton";
 
 interface ItemTagProps {
   tag: string;

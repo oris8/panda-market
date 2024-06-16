@@ -1,4 +1,4 @@
-import PostImage from "@/components/boards/PostImage";
+import PostImage from "@/components/PageComponents/boards/PostImage";
 
 interface PostContentProps {
   className?: string;

@@ -1,14 +1,13 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Button from "@/components/Button/Button";
 import FormGroup from "@/components/FormGroup/FormGroup";
 import useFormData from "@/hooks/useFormData";
 import sendAxiosRequest from "@/lib/api/sendAxiosRequest";
-import uploadImageAndGetUrl from "@/lib/utils/uploadImageAndGetUrl";
-import { useAuth } from "@/contexts/AuthProvider";
 import removeAllWhitespace from "@/lib/utils/removeAllWhitespace";
-import { useEffect, useState } from "react";
+import uploadImageAndGetUrl from "@/lib/utils/uploadImageAndGetUrl";
 
 interface PostRequestType {
   title: string;
@@ -18,7 +17,6 @@ interface PostRequestType {
 
 const AddBoard = () => {
   const [isValidation, setIsValidation] = useState(false);
-  const { user } = useAuth(true);
   const router = useRouter();
   const { formData, handleChange, handleImageChange } = useFormData({
     title: "",
@@ -104,13 +102,13 @@ const AddBoard = () => {
           />
         </FormGroup>
 
-        <Button.Primary
-          className="absolute right-0 top-0 my-36 h-42 w-74"
+        <Button
+          className="ct--primary-button absolute right-0 top-0 my-36 h-42 w-74"
           type="submit"
           disabled={!isValidation}
         >
           등록
-        </Button.Primary>
+        </Button>
       </form>
     </div>
   );

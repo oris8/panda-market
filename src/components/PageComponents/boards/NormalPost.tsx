@@ -1,5 +1,5 @@
 import Link from "next/link";
-import PostContent from "@/components/boards/PostContent";
+import PostContent from "@/components/PageComponents/boards/PostContent";
 import WriterInfo from "@/components/WriterInfo/WriterInfo";
 
 interface NormalPostProps {

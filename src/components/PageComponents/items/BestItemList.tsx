@@ -1,6 +1,6 @@
 "use client";
 
-import ItemCard from "@/components/items/ItemCard";
+import ItemCard from "@/components/Item/ItemCard";
 import Image from "next/image";
 import useDeviceSize from "@/hooks/useDeviceSize";
 import { BEST_ITEM_LIMIT } from "@/constants/pageLimit";

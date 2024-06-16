@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Button from "@/components/Button/Button";
-import FavoriteButton from "@/components/FavoriteButton";
+import FavoriteButton from "@/components/Button/FavoriteButton";
 import useDataFetch from "@/hooks/useDataFetch";
 import useFavoriteButton from "@/hooks/useFavoriteButton";
 import formatDate from "@/lib/utils/formatDate";

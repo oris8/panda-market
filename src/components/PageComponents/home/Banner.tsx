@@ -61,7 +61,7 @@ const Banner = ({ isTop = false, info }: any) => {
           )}
           {buttonText && (
             <Button.Link
-              className="primary-rounded-button mx-auto w-154 text-16 md:w-335 md:text-20 xl:mx-0"
+              className="ct--primary-rounded-button mx-auto w-154 text-16 md:w-335 md:text-20 xl:mx-0"
               href="/items"
             >
               {buttonText}

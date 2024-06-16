@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { usePathname } from "next/navigation";
 import Button from "@/components/Button/Button";
-import CommentInput from "@/components/Comment/CommentInput";
+import CommentAddForm from "@/components/Comment/CommentAddForm";
 import Comment from "@/components/Comment/Comment";
 import CommentEmpty from "@/components/Comment/CommentEmpty";
 import { useAuth } from "@/contexts/AuthProvider";
@@ -41,6 +41,19 @@ const CommentSection = ({
     }));
   };
 
+  const handleCommentEdited = (editedComment: Comment) => {
+    setValues((prev) => {
+      const updatedList = prev.list.map((comment) =>
+        comment.id === editedComment.id ? editedComment : comment,
+      );
+
+      return {
+        ...prev,
+        list: updatedList,
+      };
+    });
+  };
+
   const handleCommentDeleted = (deletedComment: Comment) => {
     setValues((prev) => {
       const updatedList = prev.list.filter(
@@ -56,7 +69,7 @@ const CommentSection = ({
 
   return (
     <>
-      <CommentInput
+      <CommentAddForm
         label="댓글 달기"
         placeholder="댓글을 입력해주세요"
         onCommentAdded={handleCommentAdded}
@@ -69,6 +82,7 @@ const CommentSection = ({
                 key={comment.id}
                 comment={comment}
                 isUserComment={(user && comment.writer.id === user.id) || false}
+                onCommentEdited={handleCommentEdited}
                 onCommentDeleted={handleCommentDeleted}
               />
             ))}
@@ -85,7 +99,7 @@ const CommentSection = ({
           <CommentEmpty />
         )}
         <Button.Link
-          className="primary-rounded-button mx-auto mt-40 h-48 w-240 gap-10 text-18"
+          className="ct--primary-rounded-button mx-auto mt-40 h-48 w-240 gap-10 text-18"
           href={returnPath}
         >
           목록으로 돌아가기

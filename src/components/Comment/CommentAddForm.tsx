@@ -11,19 +11,19 @@ import removeAllWhitespace from "@/lib/utils/removeAllWhitespace";
 const DEFAULT_PLACEHOLDER =
   "개인정보를 공유 및 요청하거나, 명예 훼손, 무단 광고, 불법 정보 유포시 모니터링 후 삭제될 수 있으며, 이에 대한 민형사상 책임은 게시자에게 있습니다.";
 
-interface CommentInputBoxProps {
+interface CommentAddFormProps {
   className?: string;
   label?: string;
   placeholder?: string;
   onCommentAdded?: (comment: Comment) => void;
 }
 
-const CommentInputBox = ({
+const CommentAddForm = ({
   className,
   label = "Comment",
   placeholder = DEFAULT_PLACEHOLDER,
   onCommentAdded = () => {},
-}: CommentInputBoxProps) => {
+}: CommentAddFormProps) => {
   const [inputValue, setInputValue] = useState("");
   const [isValidation, setIsValidation] = useState(false);
   const { isLoading, axiosFetcher } = useDataFetch();
@@ -65,15 +65,15 @@ const CommentInputBox = ({
         onChange={handleChange}
         value={inputValue}
       />
-      <Button.Primary
-        className="ml-auto h-42 w-71 text-14"
+      <Button
+        className="ct--primary-button ml-auto h-42 w-71 text-14"
         type="submit"
         disabled={!isValidation || isLoading}
       >
         {isLoading ? "등록 중..." : "등록"}
-      </Button.Primary>
+      </Button>
     </form>
   );
 };
 
-export default CommentInputBox;
+export default CommentAddForm;

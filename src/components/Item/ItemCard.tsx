@@ -1,8 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import ItemFavoriteButton from "@/components/items/ItemFavoriteButton";
-import ItemCardImage from "@/components/items/ItemCardImage";
+import ItemFavoriteButton from "@/components/Item/ItemFavoriteButton";
+import ItemCardImage from "@/components/Item/ItemCardImage";
 
 interface ItemPageCardProps {
   className?: string;

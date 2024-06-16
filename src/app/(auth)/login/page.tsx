@@ -2,10 +2,9 @@
 
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import Image from "next/image";
-import FormGroup from "@/components/FormGroup/FormGroup";
 import Button from "@/components/Button/Button";
-import SocialLogin from "@/components/auth/SocialLogin";
+import FormGroup from "@/components/FormGroup/FormGroup";
+import { AuthLogoHeader, SocialLogin } from "@/components/PageComponents/auth";
 import useAuthForm, { LogInRequest } from "@/hooks/useAuthForm";
 import { useAuth } from "@/contexts/AuthProvider";
 
@@ -29,16 +28,7 @@ const LogIn = () => {
 
   return (
     <div className="mx-auto w-full max-w-400 px-24 md:max-w-[640px]">
-      <h1 className="my-24 flex justify-center md:my-44">
-        <div className="relative h-66 w-198 md:h-132 md:w-396">
-          <Image
-            src="/images/img_panda-logo.svg"
-            alt="판다마켓"
-            fill
-            sizes="100% 100%"
-          />
-        </div>
-      </h1>
+      <AuthLogoHeader />
 
       <form onSubmit={handleSubmit(onSubmit)}>
         <FormGroup>
@@ -65,13 +55,13 @@ const LogIn = () => {
           />
         </FormGroup>
 
-        <Button.Primary
-          className="mx-w-400 primary-button mt-16 h-44 w-full rounded-36 md:max-w-[640px]"
+        <Button
+          className="mx-w-400 ct--primary-button mt-16 h-44 w-full rounded-36 md:max-w-[640px]"
           type="submit"
           disabled={Object.keys(errors).length > 0}
         >
           로그인
-        </Button.Primary>
+        </Button>
       </form>
 
       <SocialLogin />

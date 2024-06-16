@@ -3,11 +3,10 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import Image from "next/image";
 import Button from "@/components/Button/Button";
 import FormGroup from "@/components/FormGroup/FormGroup";
-import SocialLogin from "@/components/auth/SocialLogin";
-import Popup from "@/components/Popup";
+import { AuthLogoHeader, SocialLogin } from "@/components/PageComponents/auth";
+import Popup from "@/components/Popup/Popup";
 import useAuthForm, { SignUpRequest } from "@/hooks/useAuthForm";
 import sendAxiosRequest from "@/lib/api/sendAxiosRequest";
 
@@ -48,16 +47,7 @@ const SignUp = () => {
 
   return (
     <div className="mx-auto w-full max-w-400 px-24 py-36 md:max-w-[640px]">
-      <h1 className="my-24 flex justify-center md:my-44">
-        <div className="relative h-66 w-198 md:h-132 md:w-396">
-          <Image
-            src="/images/img_panda-logo.svg"
-            alt="판다마켓"
-            fill
-            sizes="100 100"
-          />
-        </div>
-      </h1>
+      <AuthLogoHeader />
 
       <form onSubmit={handleSubmit(onSubmit)}>
         <FormGroup>
@@ -111,13 +101,13 @@ const SignUp = () => {
           />
         </FormGroup>
 
-        <Button.Primary
-          className="mx-w-400 primary-button mt-16 h-44 w-full rounded-36 md:max-w-[640px]"
+        <Button
+          className="mx-w-400 ct--primary-button mt-16 h-44 w-full rounded-36 md:max-w-[640px]"
           type="submit"
           disabled={Object.keys(errors).length > 0}
         >
           회원가입
-        </Button.Primary>
+        </Button>
       </form>
 
       <SocialLogin />

@@ -1,6 +1,6 @@
 import Link from "next/link";
-import BestBadge from "@/components/boards/BestBadge";
-import PostContent from "@/components/boards/PostContent";
+import BestBadge from "@/components/PageComponents/boards/BestBadge";
+import PostContent from "@/components/PageComponents/boards/PostContent";
 import WriterInfo from "@/components/WriterInfo/WriterInfo";
 
 interface BestPostProps {

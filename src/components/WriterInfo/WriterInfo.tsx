@@ -1,5 +1,5 @@
 import Image from "next/image";
-import FavoriteButton from "@/components/FavoriteButton";
+import FavoriteButton from "@/components/Button/FavoriteButton";
 import getTimeAgo from "@/lib/utils/getTimeAgo";
 import formatDate from "@/lib/utils/formatDate";
 import { DEFAULT_PROFILE_IMAGE } from "@/constants/defaultImages";
