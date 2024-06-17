@@ -3,11 +3,11 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import BaseInput from "@/components/Input/BaseInput";
-import DeleteButton from "@/components/DeleteButton";
+import DeleteButton from "@/components/Button/DeleteButton";
 import PlusIcon from "/public/images/ic_plus.svg";
 
-export const useMultiImageInput = (initialValue: string[] = []) => {
-  const [images, setImages] = useState<string[]>([...initialValue]);
+export const useMultiImageInput = (initialValue: File[] = []) => {
+  const [images, setImages] = useState<File[]>([...initialValue]);
   const [previewImages, setPreviewImages] = useState<string[]>([]);
 
   const handleUploadFile: React.ChangeEventHandler<HTMLInputElement> = (e) => {
@@ -15,14 +15,14 @@ export const useMultiImageInput = (initialValue: string[] = []) => {
 
     if (!files || files.length === 0) return;
 
-    const newImages: string[] = [];
+    const newImages: File[] = [];
     const newPreviewImages: string[] = [];
 
     for (let i = 0; i < files.length; i++) {
       const reader = new FileReader();
       reader.onload = () => {
         const fileURL = reader.result as string;
-        newImages.push(fileURL);
+        newImages.push(files[i]);
         newPreviewImages.push(fileURL);
 
         if (newImages.length === files.length) {
@@ -56,7 +56,7 @@ interface ImageInputProps {
   className?: string;
   label: string;
   placeholder?: string;
-  onChange?: (value: string | string[]) => void;
+  onChange?: (value: File[] | string[]) => void;
 }
 
 /**
@@ -75,7 +75,7 @@ const MultiImageInput = ({
     if (onChange) {
       onChange(images);
     }
-  }, [images, onChange]);
+  }, [images]);
 
   return (
     <div className={`flex min-h-168 min-w-168 gap-8 ${className}`}>
@@ -89,6 +89,7 @@ const MultiImageInput = ({
           id={label}
           name={label}
           type="file"
+          multiple
           accept="image/*"
           onChange={handleUploadFile}
           className="hidden"

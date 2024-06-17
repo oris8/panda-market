@@ -1,53 +1,39 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import Image from "next/image";
 import Button from "@/components/Button/Button";
 import FormGroup from "@/components/FormGroup/FormGroup";
-import SocialLogin from "@/components/auth/SocialLogin";
-import Popup from "@/components/Popup";
+import { AuthLogoHeader, SocialLogin } from "@/components/PageComponents/auth";
+import Popup from "@/components/Popup/Popup";
+import useAuthForm, { SignUpRequest } from "@/hooks/useAuthForm";
 import sendAxiosRequest from "@/lib/api/sendAxiosRequest";
-import { useAuth } from "@/contexts/AuthProvider";
-
-interface SignUpRequest {
-  email: string;
-  nickname: string;
-  password: string;
-  passwordConfirmation: string;
-}
 
 const SignUp = () => {
-  const [values, setValues] = useState<SignUpRequest>({
+  const [showPopup, setShowPopup] = useState(false);
+  const router = useRouter();
+  const {
+    handleSubmit,
+    emailRegister,
+    nicknameRegister,
+    passwordRegister,
+    passwordConfirmationRegister,
+    errors,
+  } = useAuthForm<SignUpRequest>("onChange", {
     email: "",
     nickname: "",
     password: "",
     passwordConfirmation: "",
   });
-  const [isValidation, setIsValidation] = useState();
-  const [showPopup, setShowPopup] = useState(false);
-  const { user, login } = useAuth(false);
-  const router = useRouter();
 
-  const handleChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
-    const { name, value } = e.target;
-    setValues((prevValues) => ({
-      ...prevValues,
-      [name]: value,
-    }));
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const onSubmit = async (data: SignUpRequest) => {
     try {
       await sendAxiosRequest({
         method: "post",
         url: "/auth/signUp",
-        data: values,
+        data: data,
       });
-      const { email, password } = values;
-      await login({ email, password });
       setShowPopup(true);
     } catch (err: any) {
       alert(err.response.data.message);
@@ -56,80 +42,72 @@ const SignUp = () => {
 
   const handlePopupClose = () => {
     setShowPopup(false);
-    router.replace("/");
+    router.replace("/login");
   };
 
-  useEffect(() => {
-    if (user) router.replace("/");
-  });
-
   return (
-    <div className="mx-auto w-full max-w-400 px-24 md:max-w-[640px]">
-      <h1 className="my-24 flex justify-center md:my-44">
-        <div className="relative h-66 w-198 md:h-132 md:w-396">
-          <Image
-            src="/images/img_panda-logo.svg"
-            alt="판다마켓"
-            fill
-            sizes="100 100"
+    <div className="mx-auto w-full max-w-400 px-24 py-36 md:max-w-[640px]">
+      <AuthLogoHeader />
+
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <FormGroup>
+          <FormGroup.Label htmlFor="email">이메일</FormGroup.Label>
+          <FormGroup.InputField
+            label="email"
+            type="email"
+            placeholder="이메일을 입력해주세요"
+            className={`${Boolean(errors?.email?.message) ? "ct--input-error" : ""}`}
+            {...emailRegister}
           />
-        </div>
-      </h1>
-
-      <form onSubmit={handleSubmit}>
-        <FormGroup>
-          <FormGroup.InputWrapper>
-            <FormGroup.Label htmlFor="email">이메일</FormGroup.Label>
-            <FormGroup.InputField
-              label="email"
-              type="email"
-              placeholder="이메일을 입력해주세요"
-              value={values.email}
-              onChange={handleChange}
-            />
-          </FormGroup.InputWrapper>
+          <FormGroup.ErrorMessage errorMsg={errors?.email?.message || null} />
         </FormGroup>
         <FormGroup>
-          <FormGroup.InputWrapper>
-            <FormGroup.Label htmlFor="email">닉네임</FormGroup.Label>
-            <FormGroup.InputField
-              label="nickname"
-              type="text"
-              placeholder="이메일을 입력해주세요"
-              value={values.nickname}
-              onChange={handleChange}
-            />
-          </FormGroup.InputWrapper>
+          <FormGroup.Label htmlFor="nickname">닉네임</FormGroup.Label>
+          <FormGroup.InputField
+            label="nickname"
+            type="text"
+            placeholder="닉네임을 입력해주세요"
+            className={`${Boolean(errors?.nickname?.message) ? "ct--input-error" : ""}`}
+            {...nicknameRegister}
+          />
+          <FormGroup.ErrorMessage
+            errorMsg={errors?.nickname?.message || null}
+          />
         </FormGroup>
         <FormGroup>
-          <FormGroup.InputWrapper>
-            <FormGroup.Label htmlFor="password">비밀번호</FormGroup.Label>
-            <FormGroup.InputField.Password
-              label="password"
-              placeholder="비밀번호를 입력해주세요"
-              value={values.password}
-              onChange={handleChange}
-            />
-          </FormGroup.InputWrapper>
+          <FormGroup.Label htmlFor="password">비밀번호</FormGroup.Label>
+          <FormGroup.InputField.Password
+            label="password"
+            placeholder="비밀번호를 입력해주세요"
+            className={`${Boolean(errors?.password?.message) ? "ct--input-error" : ""}`}
+            {...passwordRegister}
+          />
+          <FormGroup.ErrorMessage
+            errorMsg={errors?.password?.message || null}
+          />
         </FormGroup>
         <FormGroup>
-          <FormGroup.InputWrapper>
-            <FormGroup.Label htmlFor="password">비밀번호 확인</FormGroup.Label>
-            <FormGroup.InputField.Password
-              label="passwordConfirmation"
-              placeholder="비밀번호를 다시 한 번 입력해주세요"
-              value={values.passwordConfirmation}
-              onChange={handleChange}
-            />
-          </FormGroup.InputWrapper>
+          <FormGroup.Label htmlFor="passwordConfirmation">
+            비밀번호 확인
+          </FormGroup.Label>
+          <FormGroup.InputField.Password
+            label="passwordConfirmation"
+            placeholder="비밀번호를 다시 한 번 입력해주세요"
+            className={`${Boolean(errors?.passwordConfirmation?.message) ? "ct--input-error" : ""}`}
+            {...passwordConfirmationRegister}
+          />
+          <FormGroup.ErrorMessage
+            errorMsg={errors?.passwordConfirmation?.message || null}
+          />
         </FormGroup>
 
-        <Button.Primary
-          className="mx-w-400 primary-button mt-16 h-44 w-full rounded-36 md:max-w-[640px]"
+        <Button
+          className="mx-w-400 ct--primary-button mt-16 h-44 w-full rounded-36 md:max-w-[640px]"
           type="submit"
+          disabled={Object.keys(errors).length > 0}
         >
           회원가입
-        </Button.Primary>
+        </Button>
       </form>
 
       <SocialLogin />

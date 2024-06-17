@@ -1,37 +1,42 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useParams } from "next/navigation";
 import Input from "@/components/Input/Input";
 import Button from "@/components/Button/Button";
-import sendAxiosRequest from "@/lib/api/sendAxiosRequest";
 import { useAuth } from "@/contexts/AuthProvider";
+import useDataFetch from "@/hooks/useDataFetch";
 import removeAllWhitespace from "@/lib/utils/removeAllWhitespace";
 
 const DEFAULT_PLACEHOLDER =
   "개인정보를 공유 및 요청하거나, 명예 훼손, 무단 광고, 불법 정보 유포시 모니터링 후 삭제될 수 있으며, 이에 대한 민형사상 책임은 게시자에게 있습니다.";
 
-interface CommentInputBoxProps {
+interface CommentAddFormProps {
   className?: string;
   label?: string;
   placeholder?: string;
+  onCommentAdded?: (comment: Comment) => void;
 }
 
-const CommentInputBox = ({
+const CommentAddForm = ({
   className,
   label = "Comment",
   placeholder = DEFAULT_PLACEHOLDER,
-}: CommentInputBoxProps) => {
+  onCommentAdded = () => {},
+}: CommentAddFormProps) => {
   const [inputValue, setInputValue] = useState("");
   const [isValidation, setIsValidation] = useState(false);
-  const { id } = useParams();
+  const { isLoading, axiosFetcher } = useDataFetch();
+  const prams = useParams<{ id: string }>();
+  const id = prams?.id;
   const { user } = useAuth();
 
   const handleChange: React.ChangeEventHandler<HTMLTextAreaElement> = (e) => {
     setInputValue(e.target.value);
+    setIsValidation(!!removeAllWhitespace(e.target.value));
   };
 
-  const handleAddComment: React.FormEventHandler = (e) => {
+  const handleAddComment: React.FormEventHandler = async (e) => {
     e.preventDefault();
 
     if (!user) return alert("로그인 후 이용해주세요");
@@ -41,13 +46,10 @@ const CommentInputBox = ({
       url: `articles/${id}/comments`,
       data: { content: inputValue.trim() },
     };
-    sendAxiosRequest(options);
+    const { data } = await axiosFetcher(options);
     setInputValue("");
+    onCommentAdded(data as Comment);
   };
-
-  useEffect(() => {
-    if (removeAllWhitespace(inputValue)) setIsValidation(true);
-  }, [inputValue]);
 
   return (
     <form
@@ -63,15 +65,15 @@ const CommentInputBox = ({
         onChange={handleChange}
         value={inputValue}
       />
-      <Button.Primary
-        className="ml-auto h-42 w-71 text-14"
+      <Button
+        className="ct--primary-button ml-auto h-42 w-71 text-14"
         type="submit"
-        disabled={!isValidation}
+        disabled={!isValidation || isLoading}
       >
-        등록
-      </Button.Primary>
+        {isLoading ? "등록 중..." : "등록"}
+      </Button>
     </form>
   );
 };
 
-export default CommentInputBox;
+export default CommentAddForm;

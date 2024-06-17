@@ -1,9 +1,10 @@
 "use client";
+
 import Link from "next/link";
 import Image from "next/image";
 import NavLink from "@/components/NavLink";
 import Button from "@/components/Button/Button";
-import BaseDropdown from "@/components/BaseDropdown";
+import BaseDropdown from "@/components/Dropdown/BaseDropdown";
 import { useAuth } from "@/contexts/AuthProvider";
 
 interface GNBNavLinkProps {
@@ -80,7 +81,10 @@ function Header() {
           </BaseDropdown>
         </div>
       ) : (
-        <Button.Link href="/login" className="primary-button ml-auto h-42 w-88">
+        <Button.Link
+          href="/login"
+          className="ct--primary-button ml-auto h-42 w-88"
+        >
           로그인
         </Button.Link>
       )}

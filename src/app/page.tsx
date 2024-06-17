@@ -1,5 +1,4 @@
-import Banner from "@/components/Home/Banner";
-import Section from "@/components/Home/Section";
+import { Banner, Section } from "@/components/PageComponents/home";
 
 const BANNER_INFO = [
   {

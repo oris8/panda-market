@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import BaseInput from "@/components/Input/BaseInput";
-import DeleteButton from "@/components/DeleteButton";
+import DeleteButton from "@/components/Button/DeleteButton";
 import PlusIcon from "/public/images/ic_plus.svg";
 
 export const useSingleImageInput = () => {

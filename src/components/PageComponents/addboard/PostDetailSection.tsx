@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Button from "@/components/Button/Button";
-import FavoriteButton from "@/components/FavoriteButton";
+import FavoriteButton from "@/components/Button/FavoriteButton";
 import useDataFetch from "@/hooks/useDataFetch";
 import useFavoriteButton from "@/hooks/useFavoriteButton";
 import formatDate from "@/lib/utils/formatDate";
@@ -33,7 +33,7 @@ const Post = ({ initialData }: { initialData: Post }) => {
     updateFavoriteButtonState,
     isFavoriteButtonLiked,
     favoriteButtonLikeCount,
-  } = useFavoriteButton("articles", isLiked, likeCount);
+  } = useFavoriteButton("articles/id/like", isLiked, likeCount);
 
   const deletePost = async () => {
     const options = {
@@ -68,15 +68,6 @@ const Post = ({ initialData }: { initialData: Post }) => {
     } else setIsUserPost(false);
   }, [user, data]);
 
-  // 좋아요 상태가 변경될 때마다 데이터를 업데이트하는 useEffect
-  useEffect(() => {
-    setData((prevData) => ({
-      ...prevData,
-      isLiked: isFavoriteButtonLiked,
-      likeCount: favoriteButtonLikeCount,
-    }));
-  }, [isFavoriteButtonLiked, favoriteButtonLikeCount]);
-
   return (
     <>
       {!isLoading && (
@@ -97,8 +88,8 @@ const Post = ({ initialData }: { initialData: Post }) => {
                 {formatDate(createdAt)}
               </span>
               <FavoriteButton
-                isLiked={isLiked}
-                likeCount={likeCount}
+                isLiked={isFavoriteButtonLiked}
+                likeCount={favoriteButtonLikeCount}
                 onClick={() => toggleFavoriteButton(id)}
               />
             </div>

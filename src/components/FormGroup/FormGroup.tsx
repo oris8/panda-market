@@ -1,4 +1,4 @@
-import Input from "../Input/Input";
+import Input from "@/components/Input/Input";
 
 const FormGroupWrapper = ({
   className,
@@ -35,8 +35,20 @@ const ErrorMessage = ({
   errorMsg,
 }: {
   className?: string;
-  errorMsg: string;
-}) => <p className={`error-message text-error ${className}`}>{errorMsg}</p>;
+  errorMsg: string | null;
+}) => {
+  return (
+    <>
+      {errorMsg && (
+        <p
+          className={`error-message text-14 font-medium text-error ${className}`}
+        >
+          {errorMsg}
+        </p>
+      )}
+    </>
+  );
+};
 
 const FormGroup = Object.assign(FormGroupWrapper, {
   Label: Label,

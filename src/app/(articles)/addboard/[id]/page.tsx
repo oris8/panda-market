@@ -1,5 +1,7 @@
-import PostSection from "@/components/addboard/PostSection";
-import CommentSection from "@/components/addboard/CommentSection";
+import {
+  PostDetailSection,
+  PostCommentSection,
+} from "@/components/PageComponents/addboard";
 import { APP_BASE_URL } from "@/constants/common";
 import { POST_COMMENT_LIMIT } from "@/constants/pageLimit";
 
@@ -19,13 +21,12 @@ const Page = async ({ params }: { params: { id: string } }) => {
     throw new Error("Failed to fetch data");
   }
   const postData: Post = await postResponse.json();
-  const commentsData: { nextCursor: number; list: Comment[] } =
-    await commentsResponse.json();
+  const commentsData: CommentResponse = await commentsResponse.json();
 
   return (
     <div className="h-auto">
-      <PostSection initialData={postData} />
-      <CommentSection initialData={commentsData} />
+      <PostDetailSection initialData={postData} />
+      <PostCommentSection initialData={commentsData} />
     </div>
   );
 };

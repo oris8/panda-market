@@ -11,7 +11,7 @@ interface Item {
   isFavorite: boolean;
 }
 
-interface ItemForPost {
+interface ItemCreationData {
   images: string[];
   tags: string[];
   price: number;

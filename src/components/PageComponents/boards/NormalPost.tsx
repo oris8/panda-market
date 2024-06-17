@@ -1,7 +1,6 @@
 import Link from "next/link";
-import PostInfo from "@/components/boards/PostInfo";
-import PostContent from "@/components/boards/PostContent";
-import formatDate from "@/lib/utils/formatDate";
+import PostContent from "@/components/PageComponents/boards/PostContent";
+import WriterInfo from "@/components/WriterInfo/WriterInfo";
 
 interface NormalPostProps {
   className?: string;
@@ -16,13 +15,13 @@ const NormalPost = ({ className = "", data }: NormalPostProps) => {
       <Link href={`/addboard/${id}`}>
         <PostContent title={title} content={content} image={image} />
       </Link>
-      <div className="flex items-center pt-16 [&>.postInfoFavorites]:ml-auto [&>.postInfoWriter]:mr-8">
-        <PostInfo
-          writer={writer}
-          likeCount={likeCount}
-          createdAt={formatDate(createdAt)}
-        />
-      </div>
+
+      <WriterInfo className="flex items-center pt-16">
+        <WriterInfo.ProfileImage className="mr-8" size={24} />
+        <WriterInfo.Writer nickname={writer.nickname} className="mr-8" />
+        <WriterInfo.CreatedAt createdAt={createdAt} />
+        <WriterInfo.Favorite likeCount={likeCount} className="ml-auto" />
+      </WriterInfo>
     </div>
   );
 };

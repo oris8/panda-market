@@ -1,42 +1,25 @@
 "use client";
 
-import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import Image from "next/image";
-import FormGroup from "@/components/FormGroup/FormGroup";
 import Button from "@/components/Button/Button";
-import SocialLogin from "@/components/auth/SocialLogin";
+import FormGroup from "@/components/FormGroup/FormGroup";
+import { AuthLogoHeader, SocialLogin } from "@/components/PageComponents/auth";
+import useAuthForm, { LogInRequest } from "@/hooks/useAuthForm";
 import { useAuth } from "@/contexts/AuthProvider";
 
-interface LogInRequest {
-  email: string;
-  password: string;
-}
-
 const LogIn = () => {
-  const [values, setValues] = useState<LogInRequest>({
-    email: "",
-    password: "",
-  });
-  const [isValidation, setIsValidation] = useState();
   const { login } = useAuth(false);
   const router = useRouter();
+  const { handleSubmit, emailRegister, passwordRegister, errors } =
+    useAuthForm<LogInRequest>("onChange", {
+      email: "",
+      password: "",
+    });
 
-  const handleChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
-    const { name, value } = e.target;
-    setValues((prevValues) => ({
-      ...prevValues,
-      [name]: value,
-    }));
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    const { email, password } = values;
+  const onSubmit = async (data: LogInRequest) => {
     try {
-      await login({ email, password });
+      await login(data);
       router.replace("/");
     } catch (err: any) {
       alert(err.response.data.message);
@@ -45,49 +28,40 @@ const LogIn = () => {
 
   return (
     <div className="mx-auto w-full max-w-400 px-24 md:max-w-[640px]">
-      <h1 className="my-24 flex justify-center md:my-44">
-        <div className="relative h-66 w-198 md:h-132 md:w-396">
-          <Image
-            src="/images/img_panda-logo.svg"
-            alt="판다마켓"
-            fill
-            sizes="100% 100%"
+      <AuthLogoHeader />
+
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <FormGroup>
+          <FormGroup.Label htmlFor="email">이메일</FormGroup.Label>
+          <FormGroup.InputField
+            label="email"
+            type="email"
+            placeholder="이메일을 입력해주세요"
+            className={`${Boolean(errors?.email?.message) ? "ct--input-error" : ""}`}
+            {...emailRegister}
           />
-        </div>
-      </h1>
-
-      <form onSubmit={handleSubmit}>
+          <FormGroup.ErrorMessage errorMsg={errors?.email?.message || null} />
+        </FormGroup>
         <FormGroup>
-          <FormGroup.InputWrapper>
-            <FormGroup.Label htmlFor="email">이메일</FormGroup.Label>
-            <FormGroup.InputField
-              label="email"
-              type="email"
-              placeholder="이메일을 입력해주세요"
-              value={values.email}
-              onChange={handleChange}
-            />
-          </FormGroup.InputWrapper>
+          <FormGroup.Label htmlFor="password">비밀번호</FormGroup.Label>
+          <FormGroup.InputField.Password
+            label="password"
+            placeholder="비밀번호를 입력해주세요"
+            className={`${Boolean(errors?.password?.message) ? "ct--input-error" : ""}`}
+            {...passwordRegister}
+          />
+          <FormGroup.ErrorMessage
+            errorMsg={errors?.password?.message || null}
+          />
         </FormGroup>
 
-        <FormGroup>
-          <FormGroup.InputWrapper>
-            <FormGroup.Label htmlFor="password">비밀번호</FormGroup.Label>
-            <FormGroup.InputField.Password
-              label="password"
-              placeholder="비밀번호를 입력해주세요"
-              value={values.password}
-              onChange={handleChange}
-            />
-          </FormGroup.InputWrapper>
-        </FormGroup>
-
-        <Button.Primary
-          className="mx-w-400 primary-button mt-16 h-44  w-full rounded-36 md:max-w-[640px]"
+        <Button
+          className="mx-w-400 ct--primary-button mt-16 h-44 w-full rounded-36 md:max-w-[640px]"
           type="submit"
+          disabled={Object.keys(errors).length > 0}
         >
           로그인
-        </Button.Primary>
+        </Button>
       </form>
 
       <SocialLogin />

@@ -1,25 +1,26 @@
-import BestPostList from "@/components/boards/BestPostList";
-import NormalPostList from "@/components/boards/NormalPostList";
 import Button from "@/components/Button/Button";
+import {
+  BestPostList,
+  NormalPostList,
+} from "@/components/PageComponents/boards";
 import sendAxiosRequest from "@/lib/api/sendAxiosRequest";
-import { SortOptionsKeys } from "@/types/SortOptions";
-import { BEST_POST_LIMIT } from "@/constants/pageLimit";
-import { POST_LIMIT } from "@/constants/pageLimit";
+import { PostSortOptionsKeys } from "@/types/SortOptions";
+import { BEST_POST_LIMIT, POST_LIMIT } from "@/constants/pageLimit";
 
 const INITIAL_POST_PARAMS = {
   pageSize: POST_LIMIT,
-  order: "recent" as SortOptionsKeys,
+  order: "recent" as PostSortOptionsKeys,
 };
 const INITIAL_BEST_POST_PARAMS = {
   pageSize: BEST_POST_LIMIT["large"],
-  order: "like" as SortOptionsKeys,
+  order: "like" as PostSortOptionsKeys,
 };
 
 interface BoardsProps {
   searchParams: {
     page?: number;
     keyword?: string;
-    order?: SortOptionsKeys;
+    order?: PostSortOptionsKeys;
   };
 }
 
@@ -48,7 +49,7 @@ const Boards = async ({ searchParams }: BoardsProps) => {
       <BestPostList data={bestList} className="mb-40 mt-16" />
       <div className="mb-16 flex items-center justify-between">
         <div className="text-20 font-bold text-cool-gray-800">게시글</div>
-        <Button.Link className="primary-button h-42 w-88" href="/addboard">
+        <Button.Link className="ct--primary-button h-42 w-88" href="/addboard">
           글쓰기
         </Button.Link>
       </div>

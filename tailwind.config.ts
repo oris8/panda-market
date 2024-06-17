@@ -18,6 +18,7 @@ const config: Config = {
   content: [
     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/contexts/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
@@ -84,9 +85,14 @@ const config: Config = {
       gridTemplateAreas: {
         footer: ["menus socials", "copyright copyright"],
         postInfo: ["writer favorites createdAt"],
+        itemsHeader: [
+          "title addButton addButton",
+          "searchBar searchBar sortOption",
+        ],
       },
       gridTemplateColumns: {
         postInfo: "auto auto 1fr",
+        itemsHeader: "1fr 82px 42px",
       },
     },
   },

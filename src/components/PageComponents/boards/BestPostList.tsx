@@ -1,6 +1,6 @@
 "use client";
 
-import BestPost from "@/components/boards/BestPost";
+import BestPost from "@/components/PageComponents/boards/BestPost";
 import useDeviceSize from "@/hooks/useDeviceSize";
 import { BEST_POST_LIMIT } from "@/constants/pageLimit";
 
