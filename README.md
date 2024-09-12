@@ -39,7 +39,7 @@ https://6-sprint-mission.vercel.app/
   src="https://img.shields.io/badge/github-181717?style=flat-square&logo=GitHub&logoColor=white"
 />
 
-- vanilaJS
+- vanillaJS
 
 <img
   alt="javascript badge"
